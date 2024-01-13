@@ -188,7 +188,7 @@ const Index = () => {
             <Cell>{(rowData, index) => index + 1}</Cell>
           </Column>
 
-          <Column width={100} fixed sortable>
+          <Column width={100} fixed >
             <HeaderCell>Judul</HeaderCell>
             <Cell dataKey="title">{rowData => `${rowData?.title}`}</Cell>
           </Column>

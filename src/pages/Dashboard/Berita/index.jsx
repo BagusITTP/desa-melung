@@ -12,7 +12,7 @@ import CloseIcon from '@rsuite/icons/Close';
 import { BiSolidDetail } from "react-icons/bi";
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteArticle, getArticle, articleSelector } from "../../../store/articleSlice";
-import { deleteTourImage } from "../../../store/tourImageSlice";
+import { deleteArticleImage } from "../../../store/articleImageSlice";
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
@@ -140,7 +140,7 @@ const Index = () => {
 
   const handleDeleteImage = async () => {
     setLoad(true)
-    const res = await dispatch(deleteTourImage(idDeleteImage))
+    const res = await dispatch(deleteArticleImage(idDeleteImage))
     setOpenDeleteImage(false)
     setOpenImage(false)
     await dispatch(getArticle())
@@ -190,7 +190,7 @@ const Index = () => {
             <Cell>{(rowData, index) => index + 1}</Cell>
           </Column>
 
-          <Column width={150} fixed sortable>
+          <Column width={150} fixed >
             <HeaderCell>Judul</HeaderCell>
             <Cell dataKey="title">{rowData => `${rowData?.title}`}</Cell>
           </Column>
@@ -204,7 +204,7 @@ const Index = () => {
             <HeaderCell>Gambar</HeaderCell>
             <Cell style={{ padding: '6px' }}>
               {rowData => (
-                <Button className='hover:!bg-primary-Medium-Dark !bg-primary !text-white hover:!text-white group' onClick={() => handleOpenImage(rowData?.tour_images, rowData?.title)}>
+                <Button className='hover:!bg-primary-Medium-Dark !bg-primary !text-white hover:!text-white group' onClick={() => handleOpenImage(rowData?.article_images, rowData?.title)}>
                   Lihat
                 </Button>
               )}

@@ -132,12 +132,12 @@ const Index = () => {
             <Cell>{(rowData, index) => index + 1}</Cell>
           </Column>
 
-          <Column width={200} sortable>
+          <Column width={200} >
             <HeaderCell>Nama</HeaderCell>
             <Cell>{rowData => `${rowData?.name}`}</Cell>
           </Column>
 
-          <Column width={150} fixed sortable>
+          <Column width={150} fixed >
             <HeaderCell>Email</HeaderCell>
             <Cell dataKey="title">{rowData => `${rowData?.email}`}</Cell>
           </Column>
