@@ -4,6 +4,7 @@ import attractionImage from "./attractionImage"
 import attractionSlice from "./attractionSlice"
 import commentSlice from "./commentSlice"
 import contactSlice from "./contactSlice"
+import ticketBookingSlice from "./ticketBookingSlice"
 import tourBookingSlice from "./tourBookingSlice"
 import tourImageSlice from "./tourImageSlice"
 import tourPackageSlice from "./tourPackageSlice"
@@ -21,6 +22,7 @@ const rootReducer = {
   commentSlice,
   contactSlice,
   tourBookingSlice,
+  ticketBookingSlice,
   vehicleSlice
 }
 

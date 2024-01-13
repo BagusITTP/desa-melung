@@ -12,6 +12,7 @@ import Berita from './pages/Dashboard/Berita'
 import Komentar from './pages/Dashboard/Komentar'
 import Pesan from './pages/Dashboard/Pesan'
 import PesananPaketWisata from './pages/Dashboard/Pesanan/PesananPaketWisata'
+import PesananTiketMasuk from './pages/Dashboard/Pesanan/PesananTiketMasuk'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const App = () => {
         {
           path: "/admin/pesanan/paket-wisata",
           element: <PesananPaketWisata />,
+        },
+        {
+          path: "/admin/pesanan/tiket-masuk",
+          element: <PesananTiketMasuk />,
         },
       ],
     },
