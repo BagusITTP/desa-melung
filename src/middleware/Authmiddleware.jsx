@@ -10,7 +10,7 @@ const Authmiddleware = ({ children }) => {
 
   if (!(token)) {
     toast.error('Anda harus login terlebih dahulu', optionToast)
-    return <Navigate to="/" />
+    return <Navigate to="/login" />
   }
 
   return children
