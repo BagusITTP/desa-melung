@@ -219,7 +219,7 @@ const Index = () => {
                   <Button className='hover:!bg-blue-500 group' onClick={() => handleOpenDetail(rowData, rowData.title)}>
                     <BiSolidDetail className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:!bg-green-500 group' onClick={() => navigate(`/admin/berita/update/${rowData.id}`)}>
+                  <Button className='hover:!bg-green-500 group' onClick={() => navigate(`/admin/berita/ubah/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
                   <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.title)}>

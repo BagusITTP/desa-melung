@@ -114,6 +114,10 @@ const Index = () => {
     }
   }, [])
 
+
+  const path2 = pathname.split("/")[2];
+  const path3 = pathname.split("/")[3];
+
   return (
     <div className="show-fake-browser sidebar-page">
       <Container className='frame'>
@@ -191,7 +195,17 @@ const Index = () => {
 
         <Container ref={headerRef} className={`bg-neutral-100 ${expand ? 'pl-60' : 'pl-14'} !h-fit !min-h-full`}>
           <Header
-            title={pathname.split("/")[2] === "paket-wisata" ? pathname.split("/")[3] === "update" ? "Update Paket Wisata" : titleMap[pathname] : titleMap[pathname]}
+            title={
+              path2 === "paket-wisata"
+                ? path3 === "ubah"
+                  ? "Ubah Paket Wisata"
+                  : titleMap[pathname]
+                : path2 === "berita"
+                  ? path3 === "ubah"
+                    ? "Ubah Berita"
+                    : titleMap[pathname]
+                  : titleMap[pathname]
+            }
           />
           <Content className='m-5 bg-white rounded-md !h-fit !min-h-full shadow-lg'>
             <Outlet />

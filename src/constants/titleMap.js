@@ -4,6 +4,7 @@ const titleMap = {
   '/admin/tiket-masuk': 'Tiket Masuk',
   "/admin/paket-wisata/tambah": "Tambah Paket Wisata",
   '/admin/berita': 'Daftar Berita',
+  "/admin/berita/tambah": "Tambah Berita",
   '/admin/komentar': 'Daftar Komentar',
   '/admin/pesan': 'Daftar Pesan',
   '/admin/pesanan/paket-wisata': 'Daftar Pesanan Paket Wisata',
