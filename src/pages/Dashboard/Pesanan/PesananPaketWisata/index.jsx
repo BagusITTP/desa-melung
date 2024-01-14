@@ -103,7 +103,7 @@ const Index = () => {
 
   const filteredData = () => {
     const filtered = data.filter(item => {
-      if (item?.title?.toLowerCase() != undefined && !item?.title?.toLowerCase().includes(searchKeyword.toLowerCase())) {
+      if (item?.user?.name?.toLowerCase() != undefined && !item?.user?.name?.toLowerCase().includes(searchKeyword.toLowerCase())) {
         return false;
       }
 
@@ -232,7 +232,7 @@ const Index = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <div className='flex place-content-center gap-1'>
-                  <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.title)}>
+                  <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.user.name)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
@@ -264,7 +264,7 @@ const Index = () => {
         <Modal backdrop="static" role="alertdialog" open={openDelete} onClose={handleCloseDelete} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan judul <span className="font-bold">{headerDelete}</span> ini?
+            Apakah kamu yakin untuk menghapus pesanan atas nama <span className="font-bold">{headerDelete}</span> ini?
           </Modal.Body>
           <Modal.Footer>
             <Button className='bg-red-500' color="red" onClick={handleDelete} loading={load} appearance="primary">

@@ -19,6 +19,21 @@ export const getTourBooking = createAsyncThunk("tourBooking/getTourBooking", asy
   return json
 })
 
+export const getDashboard = createAsyncThunk("tourBooking/getDashboard", async () => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+
+  const response = await fetch(`${tourBookingAPI}/dashboard`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  const json = await response.json()
+
+  return json
+})
+
 export const setTourBooking = createAsyncThunk("tourBooking/setTourBooking", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
@@ -30,22 +45,6 @@ export const setTourBooking = createAsyncThunk("tourBooking/setTourBooking", asy
       },
       body: data
     })
-
-  return response
-})
-
-export const updateTourBooking = createAsyncThunk("tourBooking/updateTourBooking", async (data) => {
-  const cookies = new Cookies()
-  let token = cookies.get("token")
-  const response = await axios.put(`${tourBookingAPI}/${data.id}`, data,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${token}`
-      }
-    })
-
-  // const json = await response.json()
 
   return response
 })
@@ -86,11 +85,18 @@ const tourBookingSlice = createSlice({
       .addCase(getTourBooking.rejected, (state) => {
         state.status = "failed"
       })
+      .addCase(getDashboard.fulfilled, (state, action) => {
+        state.status = "success",
+          tourBookingEntity.setAll(state, action.payload.data)
+      })
+      .addCase(getDashboard.pending, (state) => {
+        state.status = "pending"
+      })
+      .addCase(getDashboard.rejected, (state) => {
+        state.status = "failed"
+      })
       .addCase(setTourBooking.fulfilled, (state, action) => {
         tourBookingEntity.addOne(state, action.payload)
-      })
-      .addCase(updateTourBooking.fulfilled, (state, action) => {
-        tourBookingEntity.updateOne(state, { id: action.payload.id, updates: action.payload })
       })
       .addCase(deleteTourBooking.fulfilled, (state, action) => {
         tourBookingEntity.removeOne(state, action.payload)
