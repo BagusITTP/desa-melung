@@ -65,43 +65,37 @@ const UbahPaketWisata = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formRef.current.check()) {
-      const { title, sub_title, price, facilities, description, images } = formValue
-
-      setLoad(true)
-      let res = {}
-
-      if (images) {
-        let arr = []
-
-        const image = images.filter((item) => {
-          return item !== undefined
-        })
-
-        for (let i = 0; i < image.length; i++) {
-          arr.push(image[i])
-        }
-
-        // console.log(image);
-        res = await dispatch(updateTourPackage({ title, sub_title, description, price, facilities, images: arr, id }))
-      } else {
-        res = await dispatch(updateTourPackage({ title, description, sub_title, price, facilities, id }))
-      }
-
-      try {
-        if (res.payload.data.status === "success") {
-          toast.success(res.payload.data.message, optionToast);
-          navigate('/admin/paket-wisata')
-        } else {
-          setLoad(false)
-          toast.error(res.payload.data.message, optionToast);
-        }
-      } catch (err) {
-        setLoad(false)
-        toast.error(`Terjadi kesalahan`, optionToast);
-      }
-    } else {
+    if (!formRef.current.check()) {
       toast.error(`Perisa kembali inputan anda`, optionToast);
+      return;
+    }
+
+    const { title, sub_title, price, facilities, description, images } = formValue;
+    setLoad(true);
+
+    const arr = images ? images.filter((item) => item !== undefined) : [];
+
+    const res = await dispatch(updateTourPackage({
+      title,
+      sub_title,
+      description,
+      price,
+      facilities,
+      images: arr,
+      id
+    }));
+
+    try {
+      if (res.payload.data.status === "success") {
+        toast.success(res.payload.data.message, optionToast);
+        navigate('/admin/paket-wisata');
+      } else {
+        setLoad(false);
+        toast.error(res.payload.data.message, optionToast);
+      }
+    } catch (err) {
+      setLoad(false);
+      toast.error(`Terjadi kesalahan`, optionToast);
     }
   }
 

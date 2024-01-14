@@ -1,11 +1,17 @@
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-
 const formatDate = (date) => {
-  const formattedDate = new Date(date)?.toLocaleDateString("id-Id", options);
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  };
+
+  const formattedDate = date ? new Date(date).toLocaleDateString('id-ID', options) : null;
 
   if (formattedDate) {
-    const hour = new Date(date).getUTCHours();
-    const minute = new Date(date).getUTCMinutes();
+    const hour = new Date(date).getHours();
     let timeOfDay;
 
     if (hour < 12) {
@@ -16,7 +22,7 @@ const formatDate = (date) => {
       timeOfDay = "malam";
     }
 
-    return `${formattedDate}, ${hour}:${minute} ${timeOfDay}`;
+    return `${formattedDate}, ${timeOfDay}`;
   }
 
   return formattedDate;

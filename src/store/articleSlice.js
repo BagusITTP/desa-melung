@@ -37,7 +37,8 @@ export const setArticle = createAsyncThunk("article/setArticle", async (data) =>
 export const updateArticle = createAsyncThunk("article/updateArticle", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
-  const response = await axios.put(`${articleAPI}/${data.id}`, data,
+  const { id, ...rest } = data
+  const response = await axios.put(`${articleAPI}/${id}`, rest,
     {
       headers: {
         "Content-Type": "multipart/form-data",

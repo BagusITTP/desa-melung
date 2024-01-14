@@ -30,7 +30,7 @@ const Header = ({ title }) => {
       await toast.error("Anda telah keluar dari akun", optionToast);
 
       setTimeout(() => {
-        window.location.replace('/')
+        window.location.replace('/login')
       }, 1000);
     } catch (err) {
       await toast.error(`${err.status}`, optionToast)
