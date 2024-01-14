@@ -3,8 +3,8 @@ import { MdAccountBalance } from "react-icons/md";
 import { MdReceipt } from "react-icons/md";
 import { MdPaid } from "react-icons/md";
 import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getTicketBooking, ticketBookingSelector } from "../../../store/ticketBookingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboard, tourBookingSelector } from "../../../store/tourBookingSlice";
 import rupiah from "../../../utils/rupiah";
 
 const Card = ({ icon, title, value }) => (
@@ -42,54 +42,27 @@ const Index = () => {
       value: "Rp. 100.000"
     }
   ]);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const ticketBooking = useSelector(ticketBookingSelector.selectAll)
+  const dashboard = useSelector(tourBookingSelector.selectAll)
 
-  // useEffect(() => {
-  //   dispatch(getTicketBooking())
-  // }, [dispatch])
+  useEffect(() => {
+    dispatch(getDashboard())
+  }, [dispatch])
 
-  // useEffect(() => {
-  //   setDefaultData(ticketBooking)
-  // }, [ticketBooking])
+  useEffect(() => {
+    setDefaultData(dashboard)
+  }, [dashboard])
 
-  // setData(prevData => {
-  //   const newData = [...prevData];
-  //   newData[0] = { ...newData[0], value: 0 };
-  //   newData[1] = { ...newData[1], value: 0 };
-  //   newData[2] = { ...newData[2], value: "Rp. 0" };
-  //   return newData;
-  // })
-
-  // const getDate = (dates) => {
-  //   const date = new Date(dates);
-
-  //   let day = date.getDate();
-  //   let month = date.getMonth() + 1;
-  //   let year = date.getFullYear();
-
-  //   return `${day}-${month}-${year}`;
-  // }
-
-  // useEffect(() => {
-  //   const datasOffline = defaultData?.filter(item => item?.user_id === null && getDate(item?.date) === getDate(new Date().toJSON()))
-  //   const totalOffline = datasOffline.length > 0 ? datasOffline.reduce((acc, cur) => acc + (cur?.total_price || 0), 0) : 0;
-
-  //   const datasOnline = defaultData?.filter(item => item?.user_id !== null && getDate(item?.date) === getDate(new Date().toJSON()))
-  //   const totalOnline = datasOnline.length > 0 ? datasOnline.reduce((acc, cur) => acc + (cur?.total_price || 0), 0) : 0;
-
-  //   const total = totalOnline + totalOffline
-
-  //   setData(prevData => {
-  //     const newData = [...prevData];
-  //     newData[0] = { ...newData[0], value: datasOnline.length };
-  //     newData[1] = { ...newData[1], value: datasOffline.length };
-  //     newData[2] = { ...newData[2], value: rupiah(total) };
-  //     return newData;
-  //   });
-
-  // }, [defaultData])
+  useEffect(() => {
+    setData(prevData => {
+      const newData = [...prevData];
+      newData[0] = { ...newData[0], value: defaultData[0]?.tourBooking ? defaultData[0]?.tourBooking : 0 };
+      newData[1] = { ...newData[1], value: defaultData[0]?.ticketBooking ? defaultData[0]?.ticketBooking : 0 };
+      newData[2] = { ...newData[2], value: rupiah(defaultData[0]?.total ? defaultData[0]?.total : 0) };
+      return newData;
+    });
+  }, [defaultData])
 
   return (
     <>
