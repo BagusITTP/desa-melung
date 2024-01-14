@@ -235,7 +235,7 @@ const Index = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <div className='flex place-content-center gap-1'>
-                  <Button className='hover:!bg-green-500 group' onClick={() => navigate(`/admin/paket-wisata/update/${rowData.id}`)}>
+                  <Button className='hover:!bg-green-500 group' onClick={() => navigate(`/admin/paket-wisata/ubah/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
                   <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.title)}>

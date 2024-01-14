@@ -2,7 +2,7 @@ const titleMap = {
   '/admin/dashboard': 'Dashboard',
   '/admin/paket-wisata': 'Daftar Paket Wisata',
   '/admin/tiket-masuk': 'Tiket Masuk',
-  "/admin/objek-wisata/tambah": "Tambah Objek Wisata",
+  "/admin/paket-wisata/tambah": "Tambah Paket Wisata",
   '/admin/berita': 'Daftar Berita',
   '/admin/komentar': 'Daftar Komentar',
   '/admin/pesan': 'Daftar Pesan',

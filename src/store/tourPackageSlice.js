@@ -37,7 +37,8 @@ export const setTourPackage = createAsyncThunk("tourPackage/setTourPackage", asy
 export const updateTourPackage = createAsyncThunk("tourPackage/updateTourPackage", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
-  const response = await axios.put(`${tourPackageAPI}/${data.id}`, data,
+  const { id, ...rest } = data
+  const response = await axios.put(`${tourPackageAPI}/${id}`, rest,
     {
       headers: {
         "Content-Type": "multipart/form-data",
