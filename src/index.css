@@ -1172,18 +1172,18 @@ body {
 }
 
 a {
-  color: var(--rs-text-link);
+  /* color: var(--rs-text-link); */
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: var(--rs-text-link-hover);
+  /* color: var(--rs-text-link-hover); */
   text-decoration: underline;
 }
 
 a:active {
-  color: var(--rs-text-link-active);
+  /* color: var(--rs-text-link-active); */
   text-decoration: underline;
 }
 
@@ -10840,11 +10840,14 @@ textarea.rs-picker-search-input {
 .rs-navbar-default .rs-dropdown.rs-dropdown-open .rs-dropdown-toggle {
   background-color: var(--rs-navbar-default-hover-bg);
   color: var(--rs-navbar-default-hover-text);
+  border-radius: 0.75rem;
 }
 
 .rs-navbar-default .rs-navbar-item.rs-navbar-item-active,
 .rs-navbar-default .rs-dropdown .rs-dropdown-menu-active~.rs-dropdown-toggle {
-  color: var(--rs-navbar-default-selected-text);
+  background-color: #258752;
+  color: #fff;
+  border-radius: 0.75rem;
 }
 
 .rs-navbar-inverse {

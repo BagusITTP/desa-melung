@@ -7,7 +7,7 @@ import AuthMiddleware from './middleware/Authmiddleware'
 import Layout from './components/layout'
 
 import Dashboard from './pages/Dashboard/Dashboard'
-import PaketWisata from './pages/Dashboard/PaketWisata'
+import PaketWisataDashboard from './pages/Dashboard/PaketWisata'
 import TambahPaketWisata from './pages/Dashboard/PaketWisata/TambahPaketWisata'
 import UbahPaketWisata from './pages/Dashboard/PaketWisata/UbahPaketWisata'
 import TiketMasuk from './pages/Dashboard/TiketMasuk'
@@ -21,6 +21,8 @@ import PesananTiketMasuk from './pages/Dashboard/Pesanan/PesananTiketMasuk'
 
 import Landing from './components/landing'
 import Beranda from './pages/Beranda/Beranda'
+import PaketWisata from './pages/Beranda/PaketWisata'
+import Akun from './pages/Beranda/Akun'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -40,7 +42,7 @@ const App = () => {
         },
         {
           path: "/admin/paket-wisata",
-          element: <PaketWisata />
+          element: <PaketWisataDashboard />
         },
         {
           path: "/admin/paket-wisata/tambah",
@@ -92,7 +94,15 @@ const App = () => {
         {
           path: "/beranda",
           element: <Beranda />
-        }
+        },
+        {
+          path: "/paket-wisata",
+          element: <PaketWisata />
+        },
+        {
+          path: "/akun",
+          element: <Akun />
+        },
       ]
     }
   ])

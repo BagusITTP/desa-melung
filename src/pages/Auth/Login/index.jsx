@@ -56,7 +56,7 @@ const Index = () => {
           let role = res.payload.data.role
 
           toast.success(res.payload.message, optionToast);
-          role === 'admin' ? navigate('/admin/dashboard') : navigate(`/${role.toLowerCase()}`)
+          role === 'admin' ? navigate('/admin/dashboard') : navigate(`/beranda`)
         } else {
           setLoad(false)
           setFormValue({ ...formValue, password: "" })
