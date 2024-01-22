@@ -1,16 +1,18 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { Placeholder } from 'rsuite'
 import './App.css'
 import Error from './pages/ErrorPage'
 import Login from './pages/Auth/Login'
 import AuthMiddleware from './middleware/Authmiddleware'
+import CheckRole from './middleware/CheckRole'
 import Layout from './components/layout'
 
 import Dashboard from './pages/Dashboard/Dashboard'
 import PaketWisataDashboard from './pages/Dashboard/PaketWisata'
 import TambahPaketWisata from './pages/Dashboard/PaketWisata/TambahPaketWisata'
 import UbahPaketWisata from './pages/Dashboard/PaketWisata/UbahPaketWisata'
-import TiketMasuk from './pages/Dashboard/TiketMasuk'
+import TiketMasukDashboard from './pages/Dashboard/TiketMasuk'
 import Berita from './pages/Dashboard/Berita'
 import TambahBerita from './pages/Dashboard/Berita/TambahBerita'
 import UbahBerita from './pages/Dashboard/Berita/UbahBerita'
@@ -19,10 +21,13 @@ import Pesan from './pages/Dashboard/Pesan'
 import PesananPaketWisata from './pages/Dashboard/Pesanan/PesananPaketWisata'
 import PesananTiketMasuk from './pages/Dashboard/Pesanan/PesananTiketMasuk'
 
+import { Suspense, lazy } from 'react'
 import Landing from './components/landing'
-import Beranda from './pages/Beranda/Beranda'
-import PaketWisata from './pages/Beranda/PaketWisata'
-import Akun from './pages/Beranda/Akun'
+// import Beranda from './pages/Beranda/Beranda'
+const Beranda = lazy(() => import('./pages/Beranda/Beranda'))
+const PaketWisata = lazy(() => import('./pages/Beranda/PaketWisata'))
+const TiketMasuk = lazy(() => import('./pages/Beranda/TiketMasuk'))
+const Akun = lazy(() => import('./pages/Beranda/Akun'))
 
 const App = () => {
   const router = createBrowserRouter([
@@ -33,7 +38,7 @@ const App = () => {
     },
     {
       path: "/admin",
-      element: <AuthMiddleware><Layout /></AuthMiddleware>,
+      element: <AuthMiddleware><CheckRole><Layout /></CheckRole></AuthMiddleware>,
       errorElement: <Error />,
       children: [
         {
@@ -54,7 +59,7 @@ const App = () => {
         },
         {
           path: "/admin/tiket-masuk",
-          element: <TiketMasuk />,
+          element: <TiketMasukDashboard />,
         },
         {
           path: "/admin/berita",
@@ -93,15 +98,19 @@ const App = () => {
       children: [
         {
           path: "/beranda",
-          element: <Beranda />
+          element: <Suspense fallback={<Placeholder rows={21} columns={21} active />}><Beranda /></Suspense>
         },
         {
           path: "/paket-wisata",
-          element: <PaketWisata />
+          element: <Suspense fallback={<Placeholder rows={21} columns={21} active />}><PaketWisata /></Suspense>
+        },
+        {
+          path: "/tiket-masuk",
+          element: <Suspense fallback={<Placeholder rows={21} columns={21} active />}><TiketMasuk /></Suspense>
         },
         {
           path: "/akun",
-          element: <Akun />
+          element: <Suspense fallback={<Placeholder rows={21} columns={21} active />}><Akun /></Suspense>
         },
       ]
     }
