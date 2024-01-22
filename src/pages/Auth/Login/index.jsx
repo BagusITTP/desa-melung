@@ -9,6 +9,7 @@ import { login } from '../../../store/userSlice';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import optionToast from '../../../constants/optionToast';
+import { jwtDecode } from 'jwt-decode';
 
 const { StringType } = Schema.Types;
 const model = Schema.Model({
@@ -34,8 +35,9 @@ const Index = () => {
   useEffect(() => {
     const token = cookies.get('token');
     if (token) {
+      const dataToken = jwtDecode(token)
       toast.info('Anda sudah login', optionToast);
-      navigate('/admin/dashboard');
+      navigate(dataToken.role === 'admin' ? '/admin/dashboard' : '/beranda');
     }
   }, []);
 
