@@ -49,7 +49,7 @@ const Index = () => {
   }
   return (
     <>
-      <div className={`w-full bg-[url('/jumbotron.jpeg')] h-[calc(100vh-4rem)] bg-no-repeat bg-cover bg-center`}>
+      <div className={`w-full bg-[url('/jumbotron.webp')] h-[calc(100vh-4rem)] bg-no-repeat bg-cover bg-bottom`}>
         <div className="flex flex-col gap-3 justify-center items-center w-full h-full backdrop-blur-sm">
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center ">Desa Wisata Melung</h1>
           <p className="text-white text-lg md:text-xl w-3/4 md:w-1/2 text-center">Manfaatkan liburan kamu untuk melepaskan semua beban agar pikiran dan tubuh menjadi sehat.</p>

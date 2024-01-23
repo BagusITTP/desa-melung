@@ -213,36 +213,32 @@ const Index = () => {
           <div className="flex flex-col gap-3 border-b-[1px] border-b-secondary w-full">
             <div className="px-2 py-2 flex flex-col gap-2">
               <h6 className="text-lg font-bold">Detail</h6>
-              <div className="flex justify-between w-full">
+              <div className="flex justify-between items-center w-full">
                 <p className="text-base">Tanggal Datang</p>
-                <p className="text-base">20 Desember 2023 12:00</p>
+                <p className="text-base text-right">20 Desember 2023 12:00</p>
               </div>
-              <div className="flex justify-between w-full">
+              <div className="flex justify-between items-center w-full">
                 <p className="text-base">Tanggal Datang</p>
-                <p className="text-base">20 Desember 2023 12:00</p>
+                <p className="text-base text-right">20 Desember 2023 12:00</p>
               </div>
-              <div className="flex justify-between w-full">
-                <p className="text-base">Jumlah Makan</p>
-                <p className="text-base">9x</p>
+              <div className="flex justify-between items-center w-full">
+                <p className="text-base">Jumlah Orang</p>
+                <p className="text-base">20 orang</p>
               </div>
             </div>
             <div className="px-2 py-2 flex flex-col gap-2">
-              <h6 className="text-lg font-bold">Detail</h6>
-              <div className="flex justify-between w-full">
-                <p className="text-base">Tanggal Datang</p>
-                <p className="text-base">20 Desember 2023 12:00</p>
+              <h6 className="text-lg font-bold">Makanan</h6>
+              <div className="flex justify-between items-center w-full">
+                <p className="text-base">Total harga makan per orang</p>
+                <p className="text-base text-right">Rp. 50.000</p>
               </div>
-              <div className="flex justify-between w-full">
-                <p className="text-base">Tanggal Datang</p>
-                <p className="text-base">20 Desember 2023 12:00</p>
-              </div>
-              <div className="flex justify-between w-full">
+              <div className="flex justify-between items-center w-full">
                 <p className="text-base">Jumlah Makan</p>
                 <p className="text-base">9x</p>
               </div>
             </div>
           </div>
-          <div className="flex justify-between w-full p-2">
+          <div className="flex justify-between items-center w-full p-2">
             <p className="text-xl font-bold">Total</p>
             <p className="text-2xl font-bold">Rp. 50.000</p>
           </div>
