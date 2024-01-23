@@ -189,7 +189,7 @@ const Index = () => {
                                     {({ open }) => (
                                       <>
                                         <Menu.Button
-                                          className={`inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
+                                          className={`${open || pathname === '/paket-wisata/riwayat' || pathname === '/tiket-masuk/riwayat' ? 'bg-primary text-white' : 'text-primary hover:bg-primary hover:text-white'} inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-primary hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
                                         >
                                           <span>Riwayat</span>
                                           <ChevronDownIcon
@@ -210,32 +210,32 @@ const Index = () => {
                                             <div className="px-1 py-1">
                                               <Menu.Item>
                                                 {({ active }) => (
-                                                  <a
+                                                  <Link
                                                     key="riwayat-paket-wisata"
-                                                    href="/paket-wisata/riwayat"
-                                                    className={`${active ? 'bg-primary text-white' : 'bg-white'} w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out !no-underline hover:!no-underline hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
+                                                    to="/paket-wisata/riwayat"
+                                                    className={`${active ? 'bg-primary text-white' : 'bg-white'} w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 !no-underline hover:!no-underline`}
                                                   >
                                                     <div className="ml-4">
                                                       <p className="text-sm font-medium text-gray-900">
                                                         Paket Wisata
                                                       </p>
                                                     </div>
-                                                  </a>
+                                                  </Link>
                                                 )}
                                               </Menu.Item>
                                               <Menu.Item>
                                                 {({ active }) => (
-                                                  <a
+                                                  <Link
                                                     key="riwayat-tiket-masuk"
-                                                    href='/tiket-masuk/rowayat'
-                                                    className="w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 !no-underline hover:!no-underline"
+                                                    to='/tiket-masuk/riwayat'
+                                                    className={`${active ? 'bg-primary text-white' : 'bg-white'} w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 !no-underline hover:!no-underline`}
                                                   >
                                                     <div className="ml-4">
                                                       <p className="text-sm font-medium text-gray-900">
                                                         Tiket Masuk
                                                       </p>
                                                     </div>
-                                                  </a>
+                                                  </Link>
                                                 )}
                                               </Menu.Item>
                                             </div>
@@ -355,7 +355,7 @@ const Index = () => {
                               <Disclosure>
                                 {({ open }) => (
                                   <>
-                                    <Disclosure.Button className="flex w-full justify-between items-center rounded-lg bg-white px-3 py-2 text-left text-base font-medium text-primary hover:bg-primary hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-primary"
+                                    <Disclosure.Button className={`${open || pathname === "/paket-wisata/riwayat" || pathname === "/tiket-masuk/riwayat" ? "bg-primary text-white" : "!text-primary bg-white hover:bg-primary hover:!text-white"} flex w-full justify-between items-center rounded-lg px-3 py-2 text-left text-base font-medium focus:outline-none focus-visible:ring focus-visible:ring-primary`}
                                     >
                                       <span>Riwayat</span>
                                       <ChevronUpIcon
@@ -374,28 +374,28 @@ const Index = () => {
                                     >
                                       <Disclosure.Panel className=" text-sm text-primary">
                                         <div className="relative bg-white w-full grid grid-rows-2">
-                                          <a
+                                          <Link
                                             key="riwayat-paket-wisata"
-                                            href="/paket-wisata/riwayat"
-                                            className="w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out !no-underline hover:!no-underline hover:bg-grey-50 hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50"
+                                            to="/paket-wisata/riwayat"
+                                            className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
                                                 Paket Wisata
                                               </p>
                                             </div>
-                                          </a>
-                                          <a
+                                          </Link>
+                                          <Link
                                             key="riwayat-tiket-masuk"
-                                            href='/tiket-masuk/rowayat'
-                                            className="w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-grey-50 hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 !no-underline hover:!no-underline"
+                                            to='/tiket-masuk/riwayat'
+                                            className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
                                                 Tiket Masuk
                                               </p>
                                             </div>
-                                          </a>
+                                          </Link>
                                         </div>
                                       </Disclosure.Panel>
                                     </Transition>
@@ -405,7 +405,7 @@ const Index = () => {
                               <Disclosure>
                                 {({ open }) => (
                                   <>
-                                    <Disclosure.Button className="flex w-full justify-between items-center rounded-lg bg-white px-3 py-2 text-left text-base font-medium text-primary hover:bg-primary hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-primary"
+                                    <Disclosure.Button className={`${open || pathname === "/akun" ? "!bg-primary !text-white" : "!text-primary bg-white hover:bg-primary hover:!text-white"} flex w-full justify-between items-center rounded-lg  px-3 py-2 text-left text-base font-medium hover:bg-primary hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-primary`}
                                     >
                                       <span>{data?.name ? data?.name.split(" ")[0] : ""}</span>
                                       <ChevronUpIcon
@@ -424,21 +424,21 @@ const Index = () => {
                                     >
                                       <Disclosure.Panel className=" text-sm text-primary">
                                         <div className="relative bg-white w-full grid grid-rows-2">
-                                          <a
+                                          <Link
                                             key="akun"
-                                            href="/pengaturan/akun"
-                                            className="w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out !no-underline hover:!no-underline hover:bg-grey-50 hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50"
+                                            to="/akun"
+                                            className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
                                                 Pengaturan Akun
                                               </p>
                                             </div>
-                                          </a>
+                                          </Link>
                                           <div
                                             key="keluar"
                                             onClick={handleLogout}
-                                            className="w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-grey-50 hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 cursor-pointer"
+                                            className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50 cursor-pointer`}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
