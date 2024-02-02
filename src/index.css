@@ -1256,7 +1256,7 @@ h6 {
 }
 
 p {
-  margin: 0;
+  margin: 0 !important;
 }
 
 p+p {
@@ -2467,6 +2467,10 @@ tbody.rs-anim-collapse.rs-anim-in {
   --rs-btn-link-text: var(--rs-violet-500);
   --rs-btn-link-hover-text: var(--rs-violet-400);
   --rs-btn-link-active-text: var(--rs-violet-200);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .rs-btn-lg {

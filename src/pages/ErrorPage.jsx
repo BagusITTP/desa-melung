@@ -19,7 +19,7 @@ const ErrorPage = () => {
             <p className="error-page-subtitle text-muted ">
               {text[1] ? text[1] : "Maaf halaman yang anda cari tidak kami temukan"}
             </p>
-            <IconButton icon={<ArrowLeftLine />} appearance="primary" href="/">
+            <IconButton icon={<ArrowLeftLine />} appearance="primary" href="/beranda">
               Kembali ke dashboard
             </IconButton>
             {/* {children} */}
