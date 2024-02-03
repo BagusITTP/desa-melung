@@ -4,34 +4,42 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import LogoSmall from '../../assets/Logo_small.svg';
 import LogoLarge from '../../assets/Logo_large.svg';
-import { MdFacebook, MdWhatsapp } from "react-icons/md";
+import { MdFacebook, MdWhatsapp, MdOutlineClose } from "react-icons/md";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
-import { jwtDecode } from 'jwt-decode';
 import optionToast from '../../constants/optionToast';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import { HiOutlineBars3BottomRight } from "react-icons/hi2";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { getProfile, userSelector } from '../../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Index = () => {
   const [data, setData] = useState({ role: "", name: "" });
   const location = useLocation()
   const { pathname } = location
-  const [dataToken, setdataToken] = useState("")
-
-  const cookies = new Cookies()
+  const cookies = new Cookies();
+  const [defaultData, setDefaultData] = useState([])
+  const dispatch = useDispatch()
+  const user = useSelector(userSelector.selectAll)
 
   useEffect(() => {
-    const token = cookies.get("token")
-    if (token) setdataToken(jwtDecode(token))
-  }, [])
+    if (user.length === 0)
+      dispatch(getProfile())
+    else
+      setDefaultData(user[0])
+  }, [dispatch, user])
+
+  useEffect(() => {
+    setDefaultData(user[0] != "Tidak ada data" ? user[0] : [])
+  }, [user])
 
   useEffect(() => {
     // let AC = dataToken?.role
-    setData({ role: dataToken?.role, name: dataToken?.name })
-  }, [dataToken]);
+    setData({ role: defaultData?.role, name: defaultData?.name })
+  }, [defaultData]);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -63,10 +71,10 @@ const Index = () => {
   const navigation = useMemo(() => {
     return [
       { name: 'Beranda', href: '/beranda', current: pathname === '/beranda' },
-      { name: 'Paket Wisata', href: '/paket-wisata', current: pathname === '/paket-wisata' },
+      { name: 'Paket Wisata', href: '/paket-wisata', current: pathname === '/paket-wisata' || pathname.match(/^\/paket-wisata\/\d+$/) },
       { name: 'Tiket Masuk', href: '/tiket-masuk', current: pathname === '/tiket-masuk' },
       { name: 'Lembaga', href: '/lembaga', current: pathname === '/lembaga' },
-      { name: 'Berita', href: '/berita', current: pathname === '/berita' },
+      { name: 'Berita', href: '/berita', current: pathname === '/berita' || pathname.match(/^\/berita\/\d+$/) },
       { name: 'Kontak', href: '/kontak', current: pathname === '/kontak' },
     ];
   }, [pathname]);
@@ -95,54 +103,8 @@ const Index = () => {
     <div className="show-fake-browser sidebar-page">
       <Container>
         <Header>
-          {/* <Navbar className="!bg-white !text-primary !h-24 px-20 fixed w-screen">
-            <Navbar.Brand>
-              <a style={{ color: '#fff' }}>
-                <img src={LogoSmall} alt="Logo" />
-              </a>
-            </Navbar.Brand>
-            <Nav pullRight className="!h-full flex !items-center" activeKey={pathname}>
-              {
-                data?.role !== "user" ?
-                  (
-                    <Link to="/login" className='!text-white !bg-primary hover:!bg-slate-200 hover:!text-secondary-Medium-Dark hover:!no-underline !rounded-xl !px-5 !py-3 !font-bold' appearance="default" type="submit">
-                      Masuk
-                    </Link>
-                  )
-                  :
-                  (
-                    <Nav.Menu
-                      title={<span className="font-bold">{data?.name ? data?.name.split(" ")[0] : ""}</span>}
-                      className='!text-primary !bg-white !border-primary border !rounded-xl'
-                    >
-                      <Nav.Item as={NavLink} eventKey='/akun/pengaturan' href='/akun'>Pengaturan Akun</Nav.Item>
-                      <Nav.Item onClick={handleLogout}>Keluar</Nav.Item>
-                    </Nav.Menu>
-                  )
-              }
-            </Nav>
-            <Nav pullRight className="!h-full flex !items-center" activeKey={pathname}>
-              <Nav.Item icon={<MdHomeFilled />} as={NavLink} eventKey='/beranda' href='/beranda'>Beranda</Nav.Item>
-              <Nav.Item as={NavLink} eventKey='/paket-wisata' href='/paket-wisata'>Paket Wisata</Nav.Item>
-              <Nav.Item as={NavLink} eventKey='/tiket-masuk' href='/tiket-masuk'>Tiket Masuk</Nav.Item>
-              <Nav.Item as={NavLink} eventKey='/lembaga' href='/lembaga'>Lembaga</Nav.Item>
-              <Nav.Item as={NavLink} eventKey='/berita' href='/berita'>Berita</Nav.Item>
-              <Nav.Item as={NavLink} eventKey='/kontak' href='/kontak'>Kontak</Nav.Item>
-              {
-                data?.role === "user" ?
-                  (
-                    <Nav.Menu title="Riwayat">
-                      <Nav.Item as={NavLink} eventKey='/paket-wisata/riwayat' href='/paket-wisata/riwayat'>Paket Wisata</Nav.Item>
-                      <Nav.Item as={NavLink} eventKey='/tiket-masuk/riwayat' href='/tiket-masuk/riwayat'>Tiket Masuk</Nav.Item>
-                    </Nav.Menu>
-                  )
-                  :
-                  (null)
-              }
-            </Nav>
-          </Navbar> */}
           <Disclosure as="nav" className={`${scrolled ? 'shadow-lg' : ''} bg-white !text-primary w-screen fixed top-0 z-10 transition-colors`}>
-            {({ open }) => (
+            {({ open, close }) => (
               <>
                 <div className="mx-auto max-w-7xl px-2 lg:px-6 xl:px-8">
                   <div className="relative flex h-16 items-center justify-between">
@@ -152,9 +114,9 @@ const Index = () => {
                         <span className="absolute -inset-0.5" />
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                          <MdOutlineClose className="block h-6 w-6" aria-hidden="true" />
                         ) : (
-                          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                          <HiOutlineBars3BottomRight className="block h-6 w-6" aria-hidden="true" />
                         )}
                       </Disclosure.Button>
                     </div>
@@ -192,7 +154,7 @@ const Index = () => {
                                           className={`${open || pathname === '/paket-wisata/riwayat' || pathname === '/tiket-masuk/riwayat' ? 'bg-primary text-white' : 'text-primary hover:bg-primary hover:text-white'} inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium hover:bg-primary hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
                                         >
                                           <span>Riwayat</span>
-                                          <ChevronDownIcon
+                                          <BiChevronDown
                                             className={`ml-2 h-5 w-5 transition duration-150 ease-in-out`}
                                             aria-hidden="true"
                                           />
@@ -251,7 +213,7 @@ const Index = () => {
                                           className={`${open ? 'text-white' : 'text-primary'}text-primary !border-primary border focus:border focus:!border-primary active:border active:!border-primary focus-visible:border hover:bg-primary hover:text-white rounded-md text-sm font-medium !no-underline hover:!no-underline !flex justify-center items-center w-full px-3 h-full !py-2 group'`}
                                         >
                                           <span className="font-bold">{data?.name ? data?.name.split(" ")[0] : ""}</span>
-                                          <ChevronDownIcon
+                                          <BiChevronDown
                                             className={`ml-2 h-5 w-5 transition duration-150 ease-in-out`}
                                             aria-hidden="true"
                                           />
@@ -358,7 +320,7 @@ const Index = () => {
                                     <Disclosure.Button className={`${open || pathname === "/paket-wisata/riwayat" || pathname === "/tiket-masuk/riwayat" ? "bg-primary text-white" : "!text-primary bg-white hover:bg-primary hover:!text-white"} flex w-full justify-between items-center rounded-lg px-3 py-2 text-left text-base font-medium focus:outline-none focus-visible:ring focus-visible:ring-primary`}
                                     >
                                       <span>Riwayat</span>
-                                      <ChevronUpIcon
+                                      <BiChevronUp
                                         className={`${open ? 'rotate-180 transform' : ''
                                           } h-5 w-5 hover:text-white`}
                                       />
@@ -378,6 +340,7 @@ const Index = () => {
                                             key="riwayat-paket-wisata"
                                             to="/paket-wisata/riwayat"
                                             className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
+                                            onClick={() => close()}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
@@ -389,6 +352,7 @@ const Index = () => {
                                             key="riwayat-tiket-masuk"
                                             to='/tiket-masuk/riwayat'
                                             className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
+                                            onClick={() => close()}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
@@ -408,7 +372,7 @@ const Index = () => {
                                     <Disclosure.Button className={`${open || pathname === "/akun" ? "!bg-primary !text-white" : "!text-primary bg-white hover:bg-primary hover:!text-white"} flex w-full justify-between items-center rounded-lg  px-3 py-2 text-left text-base font-medium hover:bg-primary hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-primary`}
                                     >
                                       <span>{data?.name ? data?.name.split(" ")[0] : ""}</span>
-                                      <ChevronUpIcon
+                                      <BiChevronUp
                                         className={`${open ? 'rotate-180 transform' : ''
                                           } h-5 w-5 hover:text-white`}
                                       />
@@ -428,6 +392,7 @@ const Index = () => {
                                             key="akun"
                                             to="/akun"
                                             className={`bg-white !text-primary w-full flex gap-3 items-center rounded-lg p-3 transition duration-150 ease-in-out hover:bg-primary !no-underline hover:!no-underline hover:!text-white focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50`}
+                                            onClick={() => close()}
                                           >
                                             <div className="ml-4">
                                               <p className="text-sm font-medium">
@@ -482,7 +447,7 @@ const Index = () => {
                 allowFullScreen=""
                 aria-hidden="false"
                 tabIndex="0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-              <div className="inline-flex flex-col text-center md:text-left text-white w-fit">
+              <div className="inline-flex flex-col gap-2 text-center md:text-left text-white w-fit">
                 <h5 className="mb-3">Kontak:</h5>
                 <p className="flex items-center gap-3"><MdFacebook /> <p>Desa Wisata Melung</p></p>
                 <p className="flex items-center gap-3"><MdWhatsapp /> <p>08564759056</p></p>
@@ -500,7 +465,7 @@ const Index = () => {
             <button
               onClick={scrollToTop}
               className="p-2 bg-green-500 text-white rounded-full">
-              <ChevronUpIcon className="h-5 w-5" />
+              <BiChevronUp className="h-5 w-5" />
             </button>
           </Animation.Bounce>
         </div>
