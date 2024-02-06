@@ -12921,6 +12921,7 @@ textarea.rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input {
 
 .rs-placeholder-paragraph-rows>p {
   background-color: var(--rs-placeholder);
+  margin-top: 20px !important;
 }
 
 .rs-placeholder-grid-col {
