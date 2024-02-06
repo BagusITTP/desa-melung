@@ -1,4 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import Cookies from "universal-cookie";
 
 const userAPI = `${import.meta.env.VITE_API}/user`
@@ -16,6 +17,36 @@ export const getUser = createAsyncThunk("user/getUser", async () => {
   const json = await response.json()
 
   return json
+})
+
+export const getProfile = createAsyncThunk("user/getProfile", async () => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+
+  const response = await fetch(`${userAPI}/profile`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  const json = await response.json()
+
+  return json
+})
+
+export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+  const { name, phone_number } = data
+  const response = await axios.put(`${userAPI}/${data.id}`, { name, phone_number },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+  return response
 })
 
 export const login = createAsyncThunk("user/login", async (data) => {
@@ -68,6 +99,19 @@ const userSlice = createSlice({
       })
       .addCase(getUser.rejected, (state) => {
         state.status = "failed"
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.status = "success",
+          userEntity.setAll(state, action.payload.data)
+      })
+      .addCase(getProfile.pending, (state) => {
+        state.status = "pending"
+      })
+      .addCase(getProfile.rejected, (state) => {
+        state.status = "failed"
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        userEntity.updateOne(state, { id: action.payload.id, updates: action.payload })
       })
       .addCase(login.fulfilled, (state, action) => {
         userEntity.setAll(state, action.payload)
