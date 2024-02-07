@@ -70,7 +70,7 @@ const Index = () => {
 
   const navigation = useMemo(() => {
     return [
-      { name: 'Beranda', href: '/beranda', current: pathname === '/beranda' },
+      { name: 'Beranda', href: '/', current: pathname === '/' },
       { name: 'Paket Wisata', href: '/paket-wisata', current: pathname === '/paket-wisata' || pathname.match(/^\/paket-wisata\/\d+$/) },
       { name: 'Tiket Masuk', href: '/tiket-masuk', current: pathname === '/tiket-masuk' },
       { name: 'Lembaga', href: '/lembaga', current: pathname === '/lembaga' },
@@ -438,7 +438,7 @@ const Index = () => {
         </Header>
         <Content className="pt-16"><Outlet /></Content>
         <Footer>
-          <Container fluid className="bg-primary h-full pb-4">
+          <Container fluid="true" className="bg-primary h-full pb-4">
             <div className="flex flex-wrap justify-center items-center h-full w-full p-6 gap-5 sm:gap-10 md:gap-20 lg:gap-20 xl:gap-32">
               <img className='w-2/5 md:w-52 lg:w-56 xl:w-60' src={LogoLarge} alt="logo" />
               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63319.95982987918!2d109.20516405!3d-7.297867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6ff4c6d7690ab7%3A0x5612632581fb14a3!2sMelung%2C%20Kec.%20Kedungbanteng%2C%20Kabupaten%20Banyumas%2C%20Jawa%20Tengah!5e0!3m2!1sid!2sid!4v1705314772212!5m2!1sid!2sid" className="w-full sm:w-min h-full"
@@ -449,10 +449,10 @@ const Index = () => {
                 tabIndex="0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
               <div className="inline-flex flex-col gap-2 text-center md:text-left text-white w-fit">
                 <h5 className="mb-3">Kontak:</h5>
-                <p className="flex items-center gap-3"><MdFacebook /> <p>Desa Wisata Melung</p></p>
-                <p className="flex items-center gap-3"><MdWhatsapp /> <p>08564759056</p></p>
-                <p className="flex items-center gap-3"><FaInstagram /> <p>pagubugan_melung</p></p>
-                <p className="flex items-center gap-3"><FaXTwitter /> <p>@MelungDesa</p></p>
+                <p className="flex items-center gap-3"><MdFacebook /> <span>Desa Wisata Melung</span></p>
+                <p className="flex items-center gap-3"><MdWhatsapp /> <span>08564759056</span></p>
+                <p className="flex items-center gap-3"><FaInstagram /> <span>pagubugan_melung</span></p>
+                <p className="flex items-center gap-3"><FaXTwitter /> <span>@MelungDesa</span></p>
               </div>
             </div>
             <div className="flex justify-center items-center h-full">
