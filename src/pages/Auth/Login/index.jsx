@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Form, Button, Panel, Stack, Divider, InputGroup, Schema } from 'rsuite';
-import { useNavigate } from 'react-router-dom';
+import { Form, Button, Panel, Stack, ButtonGroup, InputGroup, Schema } from 'rsuite';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/Logo_large.svg';
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
@@ -13,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const { StringType } = Schema.Types;
 const model = Schema.Model({
-  email: StringType().isEmail('Email required').isRequired('Email harus diisi.'),
+  email: StringType().isEmail('Email harus valid').isRequired('Email harus diisi.'),
   password: StringType().isRequired('Password harus diisi.'),
 });
 const Index = () => {
@@ -37,7 +37,7 @@ const Index = () => {
     if (token) {
       const dataToken = jwtDecode(token)
       toast.info('Anda sudah login', optionToast);
-      navigate(dataToken.role === 'admin' ? '/admin/dashboard' : '/beranda');
+      navigate(dataToken.role === 'admin' ? '/admin/dashboard' : '/');
     }
   }, []);
 
@@ -58,7 +58,7 @@ const Index = () => {
           let role = res.payload.data.role
 
           toast.success(res.payload.message, optionToast);
-          role === 'admin' ? navigate('/admin/dashboard') : navigate(`/beranda`)
+          role === 'admin' ? navigate('/admin/dashboard') : navigate(`/`)
         } else {
           setLoad(false)
           setFormValue({ ...formValue, password: "" })
@@ -104,10 +104,7 @@ const Index = () => {
             <Form.Control name="email" placeholder='email@gmail.com' disabled={load} />
           </Form.Group>
           <Form.Group controlId='password'>
-            <Form.ControlLabel>
-              <span>Password</span>
-              <Form.HelpText tooltip>Password harus mengandung 1 huruf kecil, 1 huruf besar, 1 angka dan 1 simbol</Form.HelpText>
-            </Form.ControlLabel>
+            <Form.ControlLabel>Password</Form.ControlLabel>
             <InputGroup inside>
               <Form.Control type={visible ? 'text' : 'password'} name="password" placeholder='Masukkan password' autoComplete='off' disabled={load} required />
               <InputGroup.Button onClick={handleChange}>
@@ -116,16 +113,17 @@ const Index = () => {
             </InputGroup>
           </Form.Group>
           <Form.Group>
-            <Stack spacing={6} divider={<Divider vertical />}>
+            <ButtonGroup>
               <Button
                 appearance="primary"
                 type="submit"
                 onClick={handleSubmit}
                 loading={load}
               >Masuk</Button>
-            </Stack>
+            </ButtonGroup>
           </Form.Group>
         </Form>
+        <p className="text-sm !mt-2">Belum punya akun? <Link to="/register" className="text-sm text-primary">Daftar</Link></p>
       </Panel>
     </Stack>
   );
