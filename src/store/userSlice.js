@@ -34,6 +34,21 @@ export const getProfile = createAsyncThunk("user/getProfile", async () => {
   return json
 })
 
+export const register = createAsyncThunk("user/register", async (data) => {
+  const response = await fetch(`${userAPI}/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+
+  const json = await response.json()
+
+  return json
+})
+
 export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
@@ -47,6 +62,36 @@ export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
     })
 
   return response
+})
+
+export const verify = createAsyncThunk("user/verify", async (data) => {
+  const response = await fetch(`${userAPI}/verify`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+
+  const json = await response.json()
+
+  return json
+})
+
+export const otp = createAsyncThunk("user/otp", async (data) => {
+  const response = await fetch(`${userAPI}/otp`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+
+  const json = await response.json()
+
+  return json
 })
 
 export const login = createAsyncThunk("user/login", async (data) => {
@@ -110,8 +155,17 @@ const userSlice = createSlice({
       .addCase(getProfile.rejected, (state) => {
         state.status = "failed"
       })
+      .addCase(register.fulfilled, (state, action) => {
+        userEntity.setAll(state, action.payload)
+      })
       .addCase(updateUser.fulfilled, (state, action) => {
         userEntity.updateOne(state, { id: action.payload.id, updates: action.payload })
+      })
+      .addCase(verify.fulfilled, (state, action) => {
+        userEntity.setAll(state, action.payload)
+      })
+      .addCase(otp.fulfilled, (state, action) => {
+        userEntity.setAll(state, action.payload)
       })
       .addCase(login.fulfilled, (state, action) => {
         userEntity.setAll(state, action.payload)
