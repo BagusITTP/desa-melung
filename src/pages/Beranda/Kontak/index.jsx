@@ -1,21 +1,19 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { Form, ButtonToolbar, Button, Schema, Modal, SelectPicker, Input, Uploader, Message } from "rsuite"
-import RemindIcon from '@rsuite/icons/legacy/Remind';
+import { Form, ButtonToolbar, Button, Schema, SelectPicker, Input, Uploader, Message } from "rsuite"
 import { setContact } from "../../../store/contactSlice";
 import optionToast from "../../../constants/optionToast";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Cookies from 'universal-cookie';
 import { jwtDecode } from "jwt-decode";
-import { Link } from "react-router-dom";
+import Modal from "../../../components/Modal";
 
-const { StringType, ArrayType } = Schema.Types;
+const { StringType } = Schema.Types;
 const model = Schema.Model({
   name: StringType().isRequired("Nama harus diisi"),
   email: StringType().isRequired("Email harus diisi"),
   phone_number: StringType().isRequired("Nomor telepon harus diisi"),
   message: StringType().isRequired("Pesan harus diisi"),
-  images: ArrayType().isRequired("Gambar harus diisi"),
 });
 
 const data = ['umum', 'aduan', 'saran'].map(
@@ -28,6 +26,7 @@ const Textarea = forwardRef(function Textarea(props, ref) {
 
 Textarea.displayName = 'Textarea';
 const Index = () => {
+  const textButton = "Kirim"
   const formRef = useRef();
   const [formValue, setFormValue] = useState({
     name: "",
@@ -72,25 +71,27 @@ const Index = () => {
     e.preventDefault();
 
     if (formRef.current.check()) {
-      setLoad(true)
-      const res = await dispatch(setContact({ ...formValue }));
-
+      setLoad(true);
       try {
-        if (res.payload.data.status === "success") {
-          toast.success(res.payload.data.message, optionToast);
-          setLoad(false)
+        const res = await dispatch(setContact({ ...formValue }));
+        const { status, message } = res.payload.data;
+        if (status === "success") {
+          toast.success(message, optionToast);
+          setLoad(false);
+          setOpenDetail(false);
           setTimeout(() => {
-            window.location.reload()
+            window.location.reload();
           }, 800);
         } else {
-          setLoad(false)
-          toast.error(res.payload.data.message, optionToast);
+          throw new Error(message);
         }
       } catch (err) {
-        setLoad(false)
-        toast.error(`Terjadi kesalahan`, optionToast);
+        setLoad(false);
+        setOpenDetail(false);
+        toast.error(err.message || `Terjadi kesalahan`, optionToast);
       }
     } else {
+      setOpenDetail(false);
       toast.error(`Perisa kembali inputan anda`, optionToast);
     }
   }
@@ -230,50 +231,14 @@ const Index = () => {
               </Form.Group>
               <ButtonToolbar>
                 <Button appearance="primary" loading={load} type="button" onClick={handleOpenDetail}>
-                  Kirim
+                  {textButton}
                 </Button>
               </ButtonToolbar>
             </Form>
           </div>
         </div>
       </section>
-      <Modal role="alertdialog" open={openDetail} onClose={handleCloseDetail} size="sm">
-        {
-          token ?
-            (
-              <>
-                <Modal.Body>
-                  <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-                  Apakah anda sudah yakin untuk mengirim pesan ini?
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button className='bg-red-500' type="submit" color="red" onClick={handleSubmit} loading={load} appearance="primary">
-                    Kirim
-                  </Button>
-                  <Button className='bg-slate-100' onClick={handleCloseDetail} appearance="subtle">
-                    Cek Kembali
-                  </Button>
-                </Modal.Footer>
-              </>
-            )
-            :
-            (
-              <>
-                <Modal.Body>
-                  <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-                  Anda harus login terlebih dahulu
-                </Modal.Body>
-                <Modal.Footer>
-                  <Link to='/login'>
-                    <Button appearance="primary">
-                      Login
-                    </Button>
-                  </Link>
-                </Modal.Footer>
-              </>
-            )
-        }
-      </Modal>
+      <Modal openDetail={openDetail} handleCloseDetail={handleCloseDetail} handleSubmit={handleSubmit} load={load} textButton={textButton} />
     </>
   )
 }
