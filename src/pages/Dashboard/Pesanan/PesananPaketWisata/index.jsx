@@ -207,12 +207,12 @@ const Index = () => {
             <Cell>{rowData => `${formatDate(rowData?.createdAt)}`}</Cell>
           </Column>
 
-          <Column width={120} fixed >
+          <Column width={140} fixed >
             <HeaderCell>Paket</HeaderCell>
             <Cell dataKey="title">{rowData => `${rowData?.tour_package?.title}`}</Cell>
           </Column>
 
-          <Column width={280} >
+          <Column width={260} >
             <HeaderCell>Nama Pemesan</HeaderCell>
             <Cell>{rowData => `${rowData?.user?.name}`}</Cell>
           </Column>

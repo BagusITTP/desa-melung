@@ -202,19 +202,22 @@ const Index = () => {
           />
         </div>
 
-
         <Modal backdrop="static" role="alertdialog" open={openImage} onClose={handleCloseImage} size="lg">
           <Modal.Header>
             <Modal.Title>Bukti dari <span className="font-bold">{headerImage}</span></Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", padding: "20px" }}>
-              {dataImage?.map(({ url }, index) => (
-                <div key={index} style={{ position: "relative" }}>
-                  <img src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
-                </div>
-              ))}
-            </div>
+            {dataImage.length == 0
+              ? <p className="text-center w-full">Tidak ada bukti</p>
+              :
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", padding: "20px" }}>
+                {dataImage?.map(({ url }, index) => (
+                  <div key={index} style={{ position: "relative" }}>
+                    <img src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            }
           </Modal.Body>
         </Modal>
 

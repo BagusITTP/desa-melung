@@ -281,7 +281,7 @@ const Index = () => {
           </Modal.Body>
         </Modal>
 
-        <Modal backdrop="static" role="alertdialog" open={openDeleteImage} onClose={handleCloseDeleteImage} size="xs">
+        <Modal backdrop="static" role="alertdialog" open={openDeleteImage} onClose={handleCloseDeleteImage} size="md">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
             Apakah kamu yakin untuk menghapus data dengan foto <span className="font-bold">{headerDeleteImage}</span> ini?
