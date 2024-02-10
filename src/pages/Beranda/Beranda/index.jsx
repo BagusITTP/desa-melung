@@ -7,7 +7,7 @@ import PagubuganMelung from '../../../assets/images/pagubugan-melung.webp';
 import { BiChevronRight } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { articleSelector, getArticle } from '../../../store/articleSlice';
+import { articleSelector, getPageArticle } from '../../../store/articleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const CardList = [
@@ -48,11 +48,11 @@ const Index = () => {
   const tourPackage = useSelector(articleSelector.selectAll)
 
   useEffect(() => {
-    dispatch(getArticle())
+    dispatch(getPageArticle({ page: 1, limit: 8 }))
   }, [dispatch])
 
   useEffect(() => {
-    setDefaultData(tourPackage != [] ? tourPackage : [])
+    setDefaultData(tourPackage?.data != [] ? tourPackage : [])
   }, [tourPackage])
   return (
     <>
@@ -109,7 +109,7 @@ const Index = () => {
         <div className="container flex flex-col gap-4">
           <div className="flex justify-between w-full">
             <h4 className="text-center text-xl lg:text-2xl xl:text-2xl">Berita Terkini</h4>
-            <Link className="flex items-center gap-1 text-primary hover:text-primary-Medium-Dark !no-underline hover:!no-underline">
+            <Link to="/berita" className="flex items-center gap-1 text-primary hover:text-primary-Medium-Dark !no-underline hover:!no-underline">
               <p className="text-sm">Lihat Semua</p>
               <BiChevronRight size={20} />
             </Link>
@@ -118,11 +118,11 @@ const Index = () => {
             {
               status === "success"
                 ?
-                defaultData?.slice(0, 8).map((data, index) =>
+                defaultData.map((data, index) =>
                 (
                   <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={8} lg={8} xl={6} className="!overflow-hidden !rounded-md" key={index}>
                     <Link to={`/berita/${data.id}`} className="w-full h-full !no-underline hover:!no-underline !rounded-md !overflow-hidden group">
-                      <img className="!h-full !w-full sm:h-full xl:h-full max-w-full max-h-52 !rounded-md transition ease-in-out delay-150 bg-blue-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:bg-indigo-500 duration-300 object-cover" src={data?.article_images?.[0]?.url} alt="paket" />
+                      <img className="!h-full !w-full sm:h-full xl:h-full max-w-full max-h-52 !rounded-md transition ease-in-out delay-150 group-hover:-translate-y-1 group-hover:scale-110 duration-300 object-cover" src={data?.article_images?.[0]?.url || "https://placehold.co/800x600"} alt="paket" />
                       <div className="flex flex-col gap-1 w-full pt-2">
                         <h6 className="text-md font-bold group-hover:text-primary">{data?.title}</h6>
                         <p className="text-sm text-secondary">{data?.createAt}</p>

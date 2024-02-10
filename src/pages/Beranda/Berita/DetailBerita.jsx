@@ -15,7 +15,7 @@ import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, Faceboo
 import { Helmet } from 'react-helmet';
 import { Link, useLocation } from 'react-router-dom'
 import { forwardRef, useEffect, useRef, useState } from 'react'
-import { articleSelector, getArticle, getNewArticle } from '../../../store/articleSlice'
+import { articleSelector, getArticle, getPageArticle } from '../../../store/articleSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import formatDate from '../../../utils/formatDate'
@@ -86,7 +86,7 @@ const Index = () => {
   }, [dispatch, id, page])
 
   useEffect(() => {
-    dispatch(getNewArticle()).then(({ payload }) => setLists(payload?.data))
+    dispatch(getPageArticle({ page: 1, limit: 5 })).then(({ payload }) => setLists(payload?.data))
   }, [dispatch])
 
   console.log(lists)
