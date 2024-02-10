@@ -26,14 +26,12 @@ const Index = () => {
   const user = useSelector(userSelector.selectAll)
 
   useEffect(() => {
-    if (user.length === 0)
-      dispatch(getProfile())
-    else
-      setDefaultData(user[0])
-  }, [dispatch, user])
+    const token = cookies.get('token');
+    if (token) dispatch(getProfile())
+  }, [dispatch])
 
   useEffect(() => {
-    setDefaultData(user[0] != "Tidak ada data" ? user[0] : [])
+    setDefaultData(user?.[0] ? user[0] : [])
   }, [user])
 
   useEffect(() => {
@@ -136,7 +134,7 @@ const Index = () => {
                               to={item.href}
                               className={classNames(
                                 item.current ? 'bg-primary text-white !no-underline hover:!no-underline' : 'text-primary hover:bg-primary hover:text-white',
-                                'rounded-md px-3 py-2 text-sm font-medium !no-underline hover:!no-underline'
+                                'rounded-md px-3 py-2 text-sm font-medium !no-underline hover:!no-underline hover:!cursor-pointer'
                               )}
                               aria-current={item.current ? 'page' : undefined}
                             >

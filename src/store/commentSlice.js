@@ -19,13 +19,30 @@ export const getComment = createAsyncThunk("comment/getComment", async () => {
   return json
 })
 
+export const getPageComment = createAsyncThunk("comment/getPageComment", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+
+  const { id, page, limit } = data
+
+  const response = await fetch(`${commentAPI}/${id}?page=${page}&limit=${limit}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  const json = await response.json()
+
+  return json
+})
+
 export const setComment = createAsyncThunk("comment/setComment", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
   const response = await axios.post(commentAPI, data,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
       body: data
@@ -68,6 +85,16 @@ const commentSlice = createSlice({
         state.status = "pending"
       })
       .addCase(getComment.rejected, (state) => {
+        state.status = "failed"
+      })
+      .addCase(getPageComment.fulfilled, (state, action) => {
+        state.status = "success",
+          commentEntity.setAll(state, action.payload.data)
+      })
+      .addCase(getPageComment.pending, (state) => {
+        state.status = "pending"
+      })
+      .addCase(getPageComment.rejected, (state) => {
         state.status = "failed"
       })
       .addCase(setComment.fulfilled, (state, action) => {

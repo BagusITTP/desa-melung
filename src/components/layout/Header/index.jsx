@@ -61,7 +61,6 @@ const Header = ({ title }) => {
             }</strong>
           </Dropdown.Item>
           <Dropdown.Item divider />
-          <Dropdown.Item>Pengaturan Akun</Dropdown.Item>
           <Dropdown.Item onClick={handleLogout}>Keluar</Dropdown.Item>
         </Dropdown>
       </Nav>

@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Container, Sidebar, Sidenav, Content, Navbar, Nav, DOMHelper } from 'rsuite';
 import Header from './Header'
 import { Icon } from '@rsuite/icons';
-import CogIcon from '@rsuite/icons/legacy/Cog';
 import AngleLeftIcon from '@rsuite/icons/legacy/AngleLeft';
 import AngleRightIcon from '@rsuite/icons/legacy/AngleRight';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -26,19 +25,6 @@ const sideBarStyles = {
 const NavToggle = ({ expand, onChange }) => {
   return (
     <Navbar appearance="subtle" className="nav-toggle">
-      <Nav>
-        <Nav.Menu
-          noCaret
-          placement="rightStart"
-          trigger="click"
-          title={<CogIcon style={{ width: 20, height: 20 }} size="sm" />}
-        >
-          <Nav.Item>Help</Nav.Item>
-          <Nav.Item>Settings</Nav.Item>
-          <Nav.Item>Sign out</Nav.Item>
-        </Nav.Menu>
-      </Nav>
-
       <Nav pullRight>
         <Nav.Item onClick={onChange} style={{ width: 56, textAlign: 'center' }}>
           {expand ? <AngleLeftIcon /> : <AngleRightIcon />}
@@ -114,9 +100,24 @@ const Index = () => {
     }
   }, [])
 
-
   const path2 = pathname.split("/")[2];
   const path3 = pathname.split("/")[3];
+
+  const getTitle = () => {
+    if (path2 === "paket-wisata") {
+      return path3 === "ubah" ? "Ubah Paket Wisata" : titleMap[pathname];
+    } else if (path2 === "berita") {
+      return path3 === "ubah" ? "Ubah Berita" : titleMap[pathname];
+    } else {
+      return titleMap[pathname];
+    }
+  };
+
+  const getPath = () => {
+    if (path2 === "paket-wisata") return "/admin/paket-wisata"
+    else if (path2 === "berita") return "/admin/berita"
+    else return pathname
+  };
 
   return (
     <div className="show-fake-browser sidebar-page">
@@ -139,7 +140,7 @@ const Index = () => {
           >
             <Sidenav.Body className={`${expand ? "flex flex-col items-center" : ""}`}>
               <Nav
-                activeKey={pathname.split("/")[2] === "objek-wisata" ? "/admin/objek-wisata" : pathname}
+                activeKey={getPath()}
                 className={`${expand ? "w-52" : ""}`}
               >
                 {data.map((data, i) => {
@@ -194,19 +195,7 @@ const Index = () => {
         </Sidebar>
 
         <Container ref={headerRef} className={`bg-neutral-100 ${expand ? 'pl-60' : 'pl-14'} !h-fit !min-h-full`}>
-          <Header
-            title={
-              path2 === "paket-wisata"
-                ? path3 === "ubah"
-                  ? "Ubah Paket Wisata"
-                  : titleMap[pathname]
-                : path2 === "berita"
-                  ? path3 === "ubah"
-                    ? "Ubah Berita"
-                    : titleMap[pathname]
-                  : titleMap[pathname]
-            }
-          />
+          <Header title={getTitle()} />
           <Content className='m-5 bg-white rounded-md !h-fit !min-h-full shadow-lg'>
             <Outlet />
           </Content>
