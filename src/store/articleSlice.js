@@ -19,11 +19,11 @@ export const getArticle = createAsyncThunk("article/getArticle", async () => {
   return json
 })
 
-export const getNewArticle = createAsyncThunk("article/getNewArticle", async () => {
+export const getPageArticle = createAsyncThunk("article/getPageArticle", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
 
-  const response = await fetch(`${articleAPI}/new`, {
+  const response = await fetch(`${articleAPI}/new/?page=${data.page}&limit=${data.limit}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -102,14 +102,14 @@ const articleSlice = createSlice({
       .addCase(getArticle.rejected, (state) => {
         state.status = "failed"
       })
-      .addCase(getNewArticle.fulfilled, (state, action) => {
+      .addCase(getPageArticle.fulfilled, (state, action) => {
         state.status = "success",
           articleEntity.setAll(state, action.payload.data)
       })
-      .addCase(getNewArticle.pending, (state) => {
+      .addCase(getPageArticle.pending, (state) => {
         state.status = "pending"
       })
-      .addCase(getNewArticle.rejected, (state) => {
+      .addCase(getPageArticle.rejected, (state) => {
         state.status = "failed"
       })
       .addCase(setArticle.fulfilled, (state, action) => {
