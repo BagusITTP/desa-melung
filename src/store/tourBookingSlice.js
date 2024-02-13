@@ -19,6 +19,21 @@ export const getTourBooking = createAsyncThunk("tourBooking/getTourBooking", asy
   return json
 })
 
+export const getUserTourBooking = createAsyncThunk("tourBooking/getUserTourBooking", async () => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+
+  const response = await fetch(`${tourBookingAPI}/user`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  const json = await response.json()
+
+  return json
+})
+
 export const getDashboard = createAsyncThunk("tourBooking/getDashboard", async () => {
   const cookies = new Cookies()
   let token = cookies.get("token")
@@ -34,13 +49,43 @@ export const getDashboard = createAsyncThunk("tourBooking/getDashboard", async (
   return json
 })
 
+export const getOrderIdTour = createAsyncThunk("tourBooking/getOrderIdTour", async (id) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+
+  const response = await fetch(`${tourBookingAPI}/order?order_id=${id}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  const json = await response.json()
+
+  return json
+})
+
+export const getPaymentTour = createAsyncThunk("tourBooking/getPaymentTour", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+  const response = await axios.post(`${tourBookingAPI}/payment/success`, data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: data
+    })
+
+  return response
+})
+
 export const setTourBooking = createAsyncThunk("tourBooking/setTourBooking", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
   const response = await axios.post(tourBookingAPI, data,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
       body: data
@@ -85,6 +130,16 @@ const tourBookingSlice = createSlice({
       .addCase(getTourBooking.rejected, (state) => {
         state.status = "failed"
       })
+      .addCase(getUserTourBooking.fulfilled, (state, action) => {
+        state.status = "success",
+          tourBookingEntity.setAll(state, action.payload.data)
+      })
+      .addCase(getUserTourBooking.pending, (state) => {
+        state.status = "pending"
+      })
+      .addCase(getUserTourBooking.rejected, (state) => {
+        state.status = "failed"
+      })
       .addCase(getDashboard.fulfilled, (state, action) => {
         state.status = "success",
           tourBookingEntity.setAll(state, action.payload.data)
@@ -94,6 +149,19 @@ const tourBookingSlice = createSlice({
       })
       .addCase(getDashboard.rejected, (state) => {
         state.status = "failed"
+      })
+      .addCase(getOrderIdTour.fulfilled, (state, action) => {
+        state.status = "success",
+          tourBookingEntity.setAll(state, action.payload.data)
+      })
+      .addCase(getOrderIdTour.pending, (state) => {
+        state.status = "pending"
+      })
+      .addCase(getOrderIdTour.rejected, (state) => {
+        state.status = "failed"
+      })
+      .addCase(getPaymentTour.fulfilled, (state, action) => {
+        tourBookingEntity.addOne(state, action.payload)
       })
       .addCase(setTourBooking.fulfilled, (state, action) => {
         tourBookingEntity.addOne(state, action.payload)
