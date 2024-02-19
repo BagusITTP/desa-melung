@@ -109,20 +109,6 @@ export const login = createAsyncThunk("user/login", async (data) => {
   return json
 })
 
-export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
-  const cookies = new Cookies()
-  let token = cookies.get("token")
-  const response = await fetch(`${userAPI}/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  })
-  const json = await response.json()
-
-  return json
-})
-
 const userEntity = createEntityAdapter({
   selectId: (user) => user.id
 })
@@ -169,9 +155,6 @@ const userSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         userEntity.setAll(state, action.payload)
-      })
-      .addCase(deleteUser.fulfilled, (state, action) => {
-        userEntity.removeOne(state, action.payload)
       })
   }
 })
