@@ -106,7 +106,6 @@ const Index = () => {
   const location = useLocation()
   const { pathname } = location
   const title = defaultData?.title
-
   const str = defaultData?.description
 
   const handleSubmit = async (e) => {
@@ -175,7 +174,7 @@ const Index = () => {
                   ))}
                 </Carousel>
                 <p className="text-base leading-loose tracking-wide">
-                  <span className="text-secondary font-bold">{formatDate(defaultData?.createdAt)}</span> - {str}
+                  <div dangerouslySetInnerHTML={{ __html: str }} />
                 </p>
                 <p className="text-xl font-bold">Bagikan Berita</p>
                 <div className="flex gap-2">

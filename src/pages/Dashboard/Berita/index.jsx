@@ -303,7 +303,7 @@ const Index = () => {
           <Modal.Body>
             <List bordered>
               <List.Item>{dataDetail?.title}</List.Item>
-              <List.Item>{dataDetail?.description}</List.Item>
+              <List.Item><div dangerouslySetInnerHTML={{ __html: dataDetail?.description }} /></List.Item>
             </List>
           </Modal.Body>
         </Modal>
