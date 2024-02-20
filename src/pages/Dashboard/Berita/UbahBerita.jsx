@@ -5,6 +5,8 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { articleSelector, getArticle, updateArticle } from "../../../store/articleSlice";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 
 const { StringType } = Schema.Types;
 const model = Schema.Model({
@@ -73,6 +75,35 @@ const UbahBerita = () => {
       toast.error(`Terjadi kesalahan`, optionToast);
     }
   }
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
   return (
     <>
       <Panel
@@ -105,18 +136,12 @@ const UbahBerita = () => {
               value={formValue?.title}
               onChange={(data) => setFormValue({ ...formValue, title: data })}
             />
-            <Form.HelpText>Judul harus diisi</Form.HelpText>
           </Form.Group>
 
           <Form.Group controlId="deskripsi">
             <Form.ControlLabel>Deskripsi</Form.ControlLabel>
-            <Form.Control
-              accepter={Textarea}
-              rows={10}
-              name="description"
-              disabled={load}
-              errorPlacement='bottomEnd'
-              placeholder="Deskripsi"
+            <ReactQuill
+              theme="snow"
               value={formValue?.description}
               onChange={(e) => {
                 setFormValue({
@@ -124,8 +149,9 @@ const UbahBerita = () => {
                   description: e
                 })
               }}
+              modules={modules}
+              formats={formats}
             />
-            <Form.HelpText>Deskripsi harus diisi</Form.HelpText>
           </Form.Group>
 
           <Form.Group controlId="image">

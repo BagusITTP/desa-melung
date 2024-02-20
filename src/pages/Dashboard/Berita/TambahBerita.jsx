@@ -5,6 +5,8 @@ import { ToastContainer, toast } from "react-toastify"
 import { Breadcrumb, Button, ButtonToolbar, Form, Input, Panel, Schema, Uploader } from "rsuite"
 import optionToast from "../../../constants/optionToast";
 import { setArticle } from "../../../store/articleSlice";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 
 const { StringType, ArrayType } = Schema.Types;
 const model = Schema.Model({
@@ -56,6 +58,37 @@ const TambahBerita = () => {
     }
   }
 
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
+  console.log(formValue)
+
   return (
     <>
       <Panel
@@ -91,26 +124,22 @@ const TambahBerita = () => {
                 })
               }}
             />
-            <Form.HelpText>Judul harus diisi</Form.HelpText>
           </Form.Group>
 
           <Form.Group controlId="deskripsi">
             <Form.ControlLabel>Deskripsi</Form.ControlLabel>
-            <Form.Control
-              accepter={Textarea}
-              rows={10}
-              name="description"
-              disabled={load}
-              errorPlacement='bottomEnd'
-              placeholder="Deskripsi"
+            <ReactQuill
+              theme="snow"
+              value={formValue.description}
               onChange={(e) => {
                 setFormValue({
                   ...formValue,
                   description: e
                 })
               }}
+              modules={modules}
+              formats={formats}
             />
-            <Form.HelpText>Deskripsi harus diisi</Form.HelpText>
           </Form.Group>
 
           <Form.Group controlId="gambar">
@@ -136,7 +165,6 @@ const TambahBerita = () => {
                 })
               }}
             />
-            <Form.HelpText>Gambar harus diisi</Form.HelpText>
           </Form.Group>
 
           <ButtonToolbar>
