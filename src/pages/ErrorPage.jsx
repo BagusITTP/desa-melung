@@ -1,6 +1,6 @@
 import errorImg from '../assets/images/404.svg'
-import { IconButton } from 'rsuite'
-import ArrowLeftLine from '@rsuite/icons/ArrowLeftLine';
+import IconButton from "rsuite/IconButton";
+import { BiChevronLeft } from 'react-icons/bi';
 import { useRouteError } from 'react-router-dom';
 import Forbidden from '../assets/images/403.svg'
 
@@ -19,7 +19,7 @@ const ErrorPage = () => {
             <p className="error-page-subtitle text-muted ">
               {text[1] ? text[1] : "Maaf halaman yang anda cari tidak kami temukan"}
             </p>
-            <IconButton icon={<ArrowLeftLine />} appearance="primary" href="/">
+            <IconButton icon={<BiChevronLeft />} appearance="primary" href="/">
               Kembali ke dashboard
             </IconButton>
             {/* {children} */}

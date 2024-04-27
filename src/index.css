@@ -17107,8 +17107,8 @@ textarea.rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input {
 
 .rs-uploader-file-item-panel {
   position: relative !important;
-  top: 222px !important;
-  left: 750px !important;
+  top: 10px !important;
+  left: 720px !important;
   overflow-wrap: break-word !important;
   inline-size: 220px !important;
 }
@@ -17510,7 +17510,7 @@ textarea.rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input {
 
 .rs-uploader-picture-text .rs-uploader-file-item {
   position: relative;
-  height: 500px;
+  height: 200px;
   padding-left: 50px;
   margin-top: 10px;
   padding-right: 30px;
@@ -17532,8 +17532,8 @@ textarea.rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input {
   position: absolute;
   left: 0;
   top: 0;
-  width: 800px;
-  height: 100%;
+  width: 500px;
+  height: 200px;
   vertical-align: middle;
   text-align: center;
   background-color: var(--rs-border-primary);
@@ -17571,8 +17571,8 @@ textarea.rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input {
 .rs-uploader-picture-text .rs-uploader-file-item-content .rs-uploader-file-item-title {
   color: var(--rs-text-primary);
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* text-overflow: ellipsis;
+  white-space: nowrap; */
   width: 100%;
 }
 

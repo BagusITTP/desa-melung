@@ -6,6 +6,7 @@ const optionToast = {
   pauseOnHover: true,
   draggable: true,
   progress: undefined,
+  pauseOnFocusLoss: false,
   theme: "colored",
 }
 

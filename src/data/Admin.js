@@ -1,16 +1,11 @@
-import { FaTicket } from "react-icons/fa6";
-import DashboardIcon from '@rsuite/icons/Dashboard';
-import TextImageIcon from '@rsuite/icons/TextImage';
-import MediaIcon from '@rsuite/icons/Media';
-import PublicOpinionIcon from '@rsuite/icons/PublicOpinion';
-import MessageIcon from '@rsuite/icons/Message';
-import EventDetailIcon from '@rsuite/icons/EventDetail';
+import { TfiTicket } from "react-icons/tfi";
+import { BiBarChartSquare, BiMessageDetail, BiNews, BiReceipt, BiSpreadsheet, BiChat } from "react-icons/bi";
 
 const Admin = [
   {
     id: "Dashboard",
     title: "Dashboard",
-    icon: DashboardIcon,
+    icon: BiBarChartSquare,
     header: "Dashboard",
     child: [
       {
@@ -23,7 +18,7 @@ const Admin = [
   {
     id: "Paket Wisata",
     title: "Paket Wisata",
-    icon: TextImageIcon,
+    icon: BiSpreadsheet,
     header: "Paket Wisata",
     child: [
       {
@@ -36,7 +31,7 @@ const Admin = [
   {
     id: "Tiket Masuk",
     title: "Tiket Masuk",
-    icon: FaTicket,
+    icon: TfiTicket,
     header: "Tiket Masuk",
     child: [
       {
@@ -49,7 +44,7 @@ const Admin = [
   {
     id: "Berita",
     title: "Berita",
-    icon: MediaIcon,
+    icon: BiNews,
     header: "Berita",
     child: [
       {
@@ -62,7 +57,7 @@ const Admin = [
   {
     id: "Komentar",
     title: "Komentar",
-    icon: PublicOpinionIcon,
+    icon: BiChat,
     header: "Komentar",
     child: [
       {
@@ -75,7 +70,7 @@ const Admin = [
   {
     id: "Pesan",
     title: "Pesan",
-    icon: MessageIcon,
+    icon: BiMessageDetail,
     header: "Pesan",
     child: [
       {
@@ -88,7 +83,7 @@ const Admin = [
   {
     id: "Pesanan",
     title: "Pesanan",
-    icon: EventDetailIcon,
+    icon: BiReceipt,
     link: "/admin/pesanan",
     child: [
       {
