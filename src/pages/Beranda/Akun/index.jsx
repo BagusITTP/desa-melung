@@ -1,10 +1,16 @@
 import { Fragment, forwardRef, useEffect, useRef, useState } from "react";
-import { Form, ButtonToolbar, Button, Schema, Input, Message } from "rsuite"
+import Form from "rsuite/Form";
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Input from "rsuite/Input";
+import Schema from "rsuite/Schema";
+import Message from "rsuite/Message";
 import { getProfile, updateUser, userSelector } from "../../../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify"
 import optionToast from "../../../constants/optionToast";
 import { Transition } from "@headlessui/react";
+import { Helmet } from "react-helmet";
 
 const { StringType } = Schema.Types;
 const model = Schema.Model({
@@ -26,6 +32,7 @@ const Index = () => {
   const [load, setLoad] = useState(false)
   const [notif, setNotif] = useState(false)
   const dispatch = useDispatch()
+  const pathname = window.location.href
   const user = useSelector(userSelector.selectAll)
 
   useEffect(() => {
@@ -67,13 +74,22 @@ const Index = () => {
 
     } else {
       setLoad(false)
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
     }
   }
 
-  console.log(formValue)
+  console.log()
   return (
     <>
+      <Helmet>
+        <title>{`Pengaturan Akun | Desa Wisata Melung`}</title>
+
+        <meta property="og:title" content={`Pengaturan Akun | Desa Wisata Melung`} />
+        <meta property="og:url" content={pathname} />
+        <meta property="og:type" content="article" />
+        <meta property="article:section" content="Pengaturan Akun" />
+        <link rel="canonical" href={pathname} />
+      </Helmet>
       <div className="bg-primary text-white w-full h-44 flex justify-center items-center">
         <h1 className="text-3xl font-bold border-b-4 border-b-white">Pengaturan Akun</h1>
       </div>

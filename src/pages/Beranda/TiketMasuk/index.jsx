@@ -1,4 +1,11 @@
-import { FlexboxGrid, Col, Form, ButtonToolbar, Button, Schema, SelectPicker, Modal } from "rsuite"
+import FlexboxGrid from "rsuite/FlexboxGrid";
+import Col from "rsuite/Col";
+import Form from "rsuite/Form";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Button from "rsuite/Button";
+import Schema from "rsuite/Schema";
+import SelectPicker from "rsuite/SelectPicker";
+import Modal from "rsuite/Modal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify"
@@ -10,6 +17,9 @@ import rupiah from "../../../utils/rupiah";
 import { getVehicle } from "../../../store/vehicleSlice";
 import { getPaymentTicket, setTicketBooking } from "../../../store/ticketBookingSlice";
 import { useNavigate } from 'react-router-dom'
+import ModalConfirm from "../../../components/Modal";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const { NumberType } = Schema.Types;
 const model = Schema.Model({
@@ -18,6 +28,7 @@ const model = Schema.Model({
 });
 
 const Index = () => {
+  const textButton = "Pesan"
   const formRef = useRef();
   const [formValue, setFormValue] = useState({
     amount: "",
@@ -39,7 +50,7 @@ const Index = () => {
   }, [dispatch])
 
   useEffect(() => {
-    setDefaultData(attractions)
+    setDefaultData(attractions == [] ? [] : attractions[0])
   }, [attractions])
 
   useEffect(() => {
@@ -62,6 +73,10 @@ const Index = () => {
     }
   }, [listVehicle])
 
+  const [openDetailConfirm, setOpenDetailConfirm] = useState(false);
+  const handleCloseDetailConfirm = () => setOpenDetailConfirm(false);
+  const handleOpenDetailConfirm = () => setOpenDetailConfirm(true)
+
   const [openDetail, setOpenDetail] = useState(false);
   const [dataDetail, setDataDetail] = useState([]);
   const handleCloseDetail = () => setOpenDetail(false);
@@ -74,27 +89,26 @@ const Index = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formRef.current.check()) {
-      setLoad(true)
-
-      const res = await dispatch(setTicketBooking(formValue));
-
-      try {
-        if (res.payload.data.status === "success") {
-          setToken(res.payload.data.token)
-          toast.success(res.payload.data.message, optionToast);
-          setLoad(false)
-        } else {
-          setLoad(false)
-          toast.error(res.payload.data.message, optionToast);
-        }
-      } catch (err) {
-        setLoad(false)
-        toast.error(`Terjadi kesalahan`, optionToast);
-      }
-    } else {
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+    if (!formRef.current.check()) {
+      setOpenDetailConfirm(false)
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
+      return;
     }
+
+    setLoad(true)
+    try {
+      const res = await dispatch(setTicketBooking(formValue));
+      if (res.payload.data.status === "success") {
+        setToken(res.payload.data.token)
+        toast.success(res.payload.data.message, optionToast);
+      } else {
+        toast.error(res.payload.data.message, optionToast);
+      }
+    } catch (err) {
+      toast.error(`Terjadi kesalahan`, optionToast);
+    }
+    setLoad(false)
+    setOpenDetailConfirm(false)
   }
 
   useEffect(() => {
@@ -122,12 +136,15 @@ const Index = () => {
         },
         onPending: function (result) {
           dispatch(getPaymentTicket(result)).then(({ payload }) => toast.info(payload.data.message, optionToast))
+          window.location.replace('/tiket-masuk/riwayat')
         },
         onError: function (result) {
           dispatch(getPaymentTicket(result)).then(({ payload }) => toast.error(payload.data.message, optionToast))
+          window.location.replace('/tiket-masuk/riwayat')
         },
         onClose: function () {
           toast.error('Transaksi dibatalkan', optionToast)
+          window.location.replace('/tiket-masuk/riwayat')
         }
       })
     }
@@ -136,14 +153,14 @@ const Index = () => {
   const chunkSize = 3;
   const imageChunks = [];
 
-  for (let i = 0; i < defaultData[0]?.attraction_images?.length; i += chunkSize) {
-    const chunk = defaultData[0]?.attraction_images?.slice(i, i + chunkSize);
+  for (let i = 0; i < defaultData?.attraction_images?.length; i += chunkSize) {
+    const chunk = defaultData?.attraction_images?.slice(i, i + chunkSize);
     imageChunks.push(chunk);
   }
 
   const getTotal = () => {
     const selectedVehicle = listVehicle.find((data) => data.id === formValue.vehicle_id);
-    const ticketPrice = formValue.amount > 0 ? defaultData[0]?.ticket_price * formValue.amount : 0;
+    const ticketPrice = formValue.amount > 0 ? defaultData?.ticket_price * formValue.amount : 0;
     const total = ticketPrice + (selectedVehicle ? selectedVehicle.price : 0);
     setFormValue({
       ...formValue,
@@ -173,11 +190,11 @@ const Index = () => {
           <FlexboxGrid justify='space-between' className="flex justify-between items-center flex-wrap border-b-[1px] border-b-secondary py-5">
             <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={24} lg={24} xl={12} className="!flex flex-col gap-2">
               <h2 className="text-2xl">Wisata Pagubugan Melung</h2>
-              <p className="text-base text-secondary w-5/6">{defaultData[0]?.description}</p>
+              <p className="text-base text-secondary-Medium-Dark w-5/6">{defaultData?.description}</p>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={24} lg={24} xl={12} className="!flex flex-col lg:items-start xl:items-end">
-              <h6 className="text-xl font-bold text-primary">{rupiah(defaultData[0]?.ticket_price || 0)}</h6>
-              <p className="text-base text-secondary">per orang</p>
+              <h6 className="text-xl font-bold text-primary">{rupiah(defaultData?.ticket_price || 0)}</h6>
+              <p className="text-base text-secondary-Medium-Dark">per orang</p>
               <a className="text-white bg-primary hover:bg-primary-Medium-Dark px-3 py-2 mt-2 rounded no-underline hover:no-underline w-min" href="#form">Pesan</a>
             </FlexboxGrid.Item>
           </FlexboxGrid>
@@ -190,7 +207,7 @@ const Index = () => {
               <h6 className="text-lg">Fasilitas</h6>
               <ul className="mt-2 list-disc flex flex-wrap gap-x-2 gap-y-2 list-inside">
                 {
-                  defaultData[0]?.facilities?.map((item, index) => (
+                  defaultData?.facilities?.map((item, index) => (
                     <li key={index} className="text-sm">{item}</li>
                   ))
                 }
@@ -200,7 +217,7 @@ const Index = () => {
               <h6 className="text-lg">Lokasi Unik</h6>
               <ul className="mt-2 list-disc list-inside flex flex-wrap gap-x-2 gap-y-2">
                 {
-                  defaultData[0]?.locations?.map((item, index) => (
+                  defaultData?.locations?.map((item, index) => (
                     <li key={index} className="text-sm">{item}</li>
                   ))
                 }
@@ -219,7 +236,7 @@ const Index = () => {
                   <div key={index} className={`${imageChunks.length > 1 ? `grid` : 'flex justify-center flex-wrap w-full'} ${chunk.length >= 1 && chunk.length < 3 ? 'auto-rows-max' : ''} gap-2`}>
                     {
                       chunk.map((image, index) => (
-                        <img key={index} loading='lazy' className={`${imageChunks.length > 1 ? `w-full h-full` : 'w-full sm:w-full lg:w-[45%]'} rounded-lg`} src={image?.url} alt="images" />
+                        <LazyLoadImage effect="blur" key={index} loading='lazy' className={`${imageChunks.length > 1 ? `w-full h-max` : 'w-full sm:w-full lg:w-[45%]'} rounded-lg`} src={image?.url} alt="images" />
                       ))
                     }
                   </div>
@@ -297,12 +314,12 @@ const Index = () => {
                       <p className="text-lg">Total Harga</p>
                       <div className="flex gap-2">
                         <h5 className="text-2xl">{rupiah(formValue.total_price || 0)}</h5>
-                        <BiChevronDown className="w-6 h-6 cursor-pointer" onClick={() => handleOpenDetail({ jumlah: formValue.amount, kendaraan: formValue.vehicle_id, total: formValue.total_price, harga: defaultData[0].ticket_price })} />
+                        <BiChevronDown className="w-6 h-6 cursor-pointer" onClick={() => handleOpenDetail({ jumlah: formValue.amount, kendaraan: formValue.vehicle_id, total: formValue.total_price, harga: defaultData.ticket_price })} />
                       </div>
                     </div>
                     <ButtonToolbar>
-                      <Button appearance="primary" loading={load} type="submit" onClick={handleSubmit}>
-                        Pesan
+                      <Button appearance="primary" loading={load} type="submit" onClick={handleOpenDetailConfirm}>
+                        {textButton}
                       </Button>
                     </ButtonToolbar>
                   </div>
@@ -343,6 +360,8 @@ const Index = () => {
           </div>
         </Modal.Body>
       </Modal>
+
+      <ModalConfirm openDetail={openDetailConfirm} handleCloseDetail={handleCloseDetailConfirm} handleSubmit={handleSubmit} load={load} textButton={textButton} />
     </>
   )
 }
