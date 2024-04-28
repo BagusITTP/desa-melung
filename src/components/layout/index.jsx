@@ -1,9 +1,14 @@
-import { forwardRef, useEffect, useRef, useState } from 'react'
-import { Container, Sidebar, Sidenav, Content, Navbar, Nav, DOMHelper } from 'rsuite';
+import { Fragment, forwardRef, useEffect, useRef, useState } from 'react'
+import Container from 'rsuite/Container'
+import Sidebar from 'rsuite/Sidebar'
+import Sidenav from 'rsuite/Sidenav'
+import Content from 'rsuite/Content'
+import Navbar from 'rsuite/Navbar'
+import Nav from 'rsuite/Nav'
+import DOMHelper from 'rsuite/DOMHelper'
 import Header from './Header'
 import { Icon } from '@rsuite/icons';
-import AngleLeftIcon from '@rsuite/icons/legacy/AngleLeft';
-import AngleRightIcon from '@rsuite/icons/legacy/AngleRight';
+import { BiChevronRight, BiChevronLeft } from 'react-icons/bi';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import * as AL from '../../data/index'
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +32,7 @@ const NavToggle = ({ expand, onChange }) => {
     <Navbar appearance="subtle" className="nav-toggle">
       <Nav pullRight>
         <Nav.Item onClick={onChange} style={{ width: 56, textAlign: 'center' }}>
-          {expand ? <AngleLeftIcon /> : <AngleRightIcon />}
+          {expand ? <BiChevronLeft /> : <BiChevronRight />}
         </Nav.Item>
       </Nav>
     </Navbar>
@@ -146,46 +151,44 @@ const Index = () => {
                 {data.map((data, i) => {
                   let { title, icon, link, child } = data
                   return (
-                    <>
+                    <Fragment key={i}>
                       {
                         data.header
                           ?
-                          <>
+                          <Fragment key={i}>
                             {child.map((child, index) => {
                               return (
-                                <>
-                                  <Nav.Item
-                                    as={NavLink}
-                                    href={child.childlink}
-                                    eventKey={child.id}
-                                    title={child.childtitle}
-                                    icon={<Icon as={icon} />}
-                                    key={index}
-                                  >{child.childtitle}</Nav.Item>
-                                </>
+                                <Nav.Item
+                                  as={NavLink}
+                                  href={child.childlink}
+                                  eventKey={child.id}
+                                  title={<span>{child.childtitle}</span>}
+                                  icon={<Icon as={icon} style={{ fontSize: "1.2em", top: "13px", left: expand ? "" : "15px" }} />}
+                                  key={index}
+                                >
+                                  {child.childtitle}
+                                </Nav.Item>
                               )
                             })}
-                          </>
+                          </Fragment>
                           :
                           <Nav.Menu
                             eventKey={link}
                             trigger="hover"
                             title={title}
-                            icon={<Icon as={icon} />}
+                            icon={<Icon as={icon} style={{ fontSize: "1.2em", top: "13px", left: "15px" }} />}
                             placement="rightStart"
                             key={i}
                           >
                             {child.map((childs, key) => {
                               return (
-                                <>
-                                  <Nav.Item as={NavLink} href={childs.childlink} eventKey={childs.id} key={key}
-                                  >{childs.childtitle}</Nav.Item>
-                                </>
+                                <Nav.Item as={NavLink} href={childs.childlink} eventKey={childs.id} key={key}
+                                >{childs.childtitle}</Nav.Item>
                               )
                             })}
                           </Nav.Menu>
                       }
-                    </>
+                    </Fragment>
                   )
                 })}
               </Nav>

@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  Dropdown,
-  Navbar,
-  Nav,
-  Avatar,
-} from 'rsuite';
+import Dropdown from 'rsuite/Dropdown';
+import Navbar from 'rsuite/Navbar';
+import Nav from 'rsuite/Nav';
+import Avatar from 'rsuite/Avatar';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 import optionToast from '../../../constants/optionToast';

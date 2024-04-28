@@ -1,18 +1,21 @@
 import { forwardRef, useEffect, useMemo, useState } from 'react'
-import { Container, Content, Header, Footer, Animation } from 'rsuite';
+import Container from 'rsuite/Container'
+import Content from 'rsuite/Content'
+import Header from 'rsuite/Header'
+import Footer from 'rsuite/Footer'
+import Animation from 'rsuite/Animation'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import LogoSmall from '../../assets/Logo_small.svg';
 import LogoLarge from '../../assets/Logo_large.svg';
-import { MdFacebook, MdWhatsapp, MdOutlineClose } from "react-icons/md";
-import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { TfiClose } from 'react-icons/tfi';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import optionToast from '../../constants/optionToast';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { HiOutlineBars3BottomRight } from "react-icons/hi2";
-import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { BiChevronDown, BiChevronUp, BiLogoWhatsapp, BiLogoTwitter, BiLogoInstagram, BiLogoFacebook } from "react-icons/bi";
 import { getProfile, userSelector } from '../../store/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -112,7 +115,7 @@ const Index = () => {
                         <span className="absolute -inset-0.5" />
                         <span className="sr-only">Open main menu</span>
                         {open ? (
-                          <MdOutlineClose className="block h-6 w-6" aria-hidden="true" />
+                          <TfiClose className="block h-6 w-6" aria-hidden="true" />
                         ) : (
                           <HiOutlineBars3BottomRight className="block h-6 w-6" aria-hidden="true" />
                         )}
@@ -447,10 +450,10 @@ const Index = () => {
                 tabIndex="0" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
               <div className="inline-flex flex-col gap-2 text-center md:text-left text-white w-fit">
                 <h5 className="mb-3">Kontak:</h5>
-                <p className="flex items-center gap-3"><MdFacebook /> <span>Desa Wisata Melung</span></p>
-                <p className="flex items-center gap-3"><MdWhatsapp /> <span>08564759056</span></p>
-                <p className="flex items-center gap-3"><FaInstagram /> <span>pagubugan_melung</span></p>
-                <p className="flex items-center gap-3"><FaXTwitter /> <span>@MelungDesa</span></p>
+                <p className="flex items-center gap-3"><BiLogoFacebook /> <span>Desa Wisata Melung</span></p>
+                <p className="flex items-center gap-3"><BiLogoWhatsapp /> <span>085647590546</span></p>
+                <p className="flex items-center gap-3"><BiLogoInstagram /> <span>pagubugan_melung</span></p>
+                <p className="flex items-center gap-3"><BiLogoTwitter /> <span>@MelungDesa</span></p>
               </div>
             </div>
             <div className="flex justify-center items-center h-full">
