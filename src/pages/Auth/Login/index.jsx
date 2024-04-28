@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Form, Button, Panel, Stack, ButtonGroup, InputGroup, Schema } from 'rsuite';
+import Form from 'rsuite/Form';
+import Button from 'rsuite/Button';
+import Panel from 'rsuite/Panel';
+import Stack from 'rsuite/Stack';
+import ButtonGroup from 'rsuite/ButtonGroup';
+import InputGroup from 'rsuite/InputGroup';
+import Schema from 'rsuite/Schema';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/Logo_large.svg';
-import EyeIcon from '@rsuite/icons/legacy/Eye';
-import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
+import { HiMiniEye, HiMiniEyeSlash } from 'react-icons/hi2';
 import { ToastContainer, toast } from 'react-toastify';
 import { login } from '../../../store/userSlice';
 import { useDispatch } from 'react-redux';
@@ -100,15 +105,15 @@ const Index = () => {
           fluid
         >
           <Form.Group controlId='email'>
-            <Form.ControlLabel>Email address</Form.ControlLabel>
-            <Form.Control name="email" placeholder='email@gmail.com' disabled={load} />
+            <Form.ControlLabel>Email</Form.ControlLabel>
+            <Form.Control name="email" placeholder='email@gmail.com' disabled={load} autoFocus />
           </Form.Group>
           <Form.Group controlId='password'>
             <Form.ControlLabel>Password</Form.ControlLabel>
             <InputGroup inside>
               <Form.Control type={visible ? 'text' : 'password'} name="password" placeholder='Masukkan password' autoComplete='off' disabled={load} required />
               <InputGroup.Button onClick={handleChange}>
-                {visible ? <EyeIcon /> : <EyeSlashIcon />}
+                {visible ? <HiMiniEyeSlash /> : <HiMiniEye />}
               </InputGroup.Button>
             </InputGroup>
           </Form.Group>

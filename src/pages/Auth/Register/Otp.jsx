@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Panel, Stack, ButtonGroup, Button } from 'rsuite';
+import Panel from 'rsuite/Panel';
+import Stack from 'rsuite/Stack';
+import ButtonGroup from 'rsuite/ButtonGroup';
+import Button from 'rsuite/Button';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Logo from '../../../assets/Logo_large.svg';
 import { ToastContainer, toast } from 'react-toastify';
@@ -134,6 +137,7 @@ const Otp = () => {
             }}
             autoSelect={true}
             regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+            focus
           />
 
           {seconds > 0 ? (

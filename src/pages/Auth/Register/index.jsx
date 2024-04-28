@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Form, Button, Panel, Stack, ButtonGroup, InputGroup, Schema } from 'rsuite';
+import Form from 'rsuite/Form';
+import Button from 'rsuite/Button';
+import Panel from 'rsuite/Panel';
+import Stack from 'rsuite/Stack';
+import ButtonGroup from 'rsuite/ButtonGroup';
+import InputGroup from 'rsuite/InputGroup';
+import Schema from 'rsuite/Schema';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/Logo_large.svg';
-import EyeIcon from '@rsuite/icons/legacy/Eye';
-import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
+import { HiMiniEye, HiMiniEyeSlash } from 'react-icons/hi2';
 import { ToastContainer, toast } from 'react-toastify';
 import { register } from '../../../store/userSlice';
 import { useDispatch } from 'react-redux';
@@ -11,12 +16,12 @@ import Cookies from 'universal-cookie';
 import optionToast from '../../../constants/optionToast';
 import { jwtDecode } from 'jwt-decode';
 
-const { StringType } = Schema.Types;
+const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
   name: StringType().minLength(3, "Nama harus lebih dari 3 karakter").isRequired("Nama harus diisi"),
   email: StringType().isEmail("Email harus valid").isRequired("Email harus diisi"),
   password: StringType().isRequired("Password harus diisi"),
-  phone_number: StringType().isRequired("Nomor telepon harus diisi"),
+  phone_number: NumberType().isInteger().isRequired("Nomor telepon harus diisi"),
 });
 const Index = () => {
   const formRef = useRef();
@@ -46,10 +51,12 @@ const Index = () => {
   const handleSubmit = async () => {
     // console.log(formValue, 'Form Value');
 
-    if (formRef.current.check()) {
+    try {
       setLoad(true)
 
-      try {
+      console.log(formValue)
+      if (formRef.current.check()) {
+
         const res = await dispatch(register(formValue))
         if (res.payload.status === "success") {
           setLoad(false)
@@ -57,18 +64,19 @@ const Index = () => {
           navigate('/register/verify', { state: formValue.email })
         } else {
           setLoad(false)
-          setFormValue({ ...formValue, password: "" })
+          setFormValue({ ...formValue, password: "", phone_number: "" })
           toast.error(res.payload.message, optionToast);
         }
-      } catch (err) {
+      } else {
         setLoad(false)
-        setFormValue({ ...formValue, password: "" })
-        toast.error(`Terjadi kesalahan`, optionToast);
+        setFormValue({ ...formValue, password: "", phone_number: "" })
+        toast.error(`Pastikan semua data yang Anda masukkan sudah benar.
+        `, optionToast);
       }
-    } else {
+    } catch (err) {
       setLoad(false)
       setFormValue({ ...formValue, password: "" })
-      toast.error(`Perisa kembali email dan password anda`, optionToast);
+      toast.error(`Terjadi kesalahan`, optionToast);
     }
   };
 
@@ -102,10 +110,11 @@ const Index = () => {
               errorPlacement='bottomEnd'
               placeholder="Nama Lengkap Anda"
               disabled={load}
+              autoFocus
             />
           </Form.Group>
           <Form.Group controlId='email'>
-            <Form.ControlLabel>Email address</Form.ControlLabel>
+            <Form.ControlLabel>Email</Form.ControlLabel>
             <Form.Control
               name="email"
               errorPlacement='bottomEnd'
@@ -129,7 +138,7 @@ const Index = () => {
                 required
               />
               <InputGroup.Button onClick={handleChange}>
-                {visible ? <EyeIcon /> : <EyeSlashIcon />}
+                {visible ? <HiMiniEyeSlash /> : <HiMiniEye />}
               </InputGroup.Button>
             </InputGroup>
           </Form.Group>
