@@ -1,5 +1,12 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { Form, ButtonToolbar, Button, Schema, SelectPicker, Input, Uploader, Message } from "rsuite"
+import Form from "rsuite/Form";
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Input from "rsuite/Input";
+import Schema from "rsuite/Schema";
+import Message from "rsuite/Message";
+import SelectPicker from "rsuite/SelectPicker";
+import Uploader from "rsuite/Uploader";
 import { setContact } from "../../../store/contactSlice";
 import optionToast from "../../../constants/optionToast";
 import { useDispatch } from "react-redux";
@@ -92,7 +99,7 @@ const Index = () => {
       }
     } else {
       setOpenDetail(false);
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
     }
   }
   return (

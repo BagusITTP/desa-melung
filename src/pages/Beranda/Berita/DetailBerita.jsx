@@ -13,7 +13,7 @@ import Placeholder from 'rsuite/Placeholder';
 import Pagination from 'rsuite/Pagination';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, FacebookShareCount, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from 'react-share';
 import { Helmet } from 'react-helmet';
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { articleSelector, getArticle, getPageArticle } from '../../../store/articleSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -70,6 +70,12 @@ const Index = () => {
   }, [dataToken])
   const { id } = useParams()
 
+  useEffect(() => {
+    if (dataToken) {
+      sessionStorage.removeItem("checked")
+    }
+  }, [])
+
   const { status } = useSelector(state => state.commentSlice)
   const articles = useSelector((state) => articleSelector.selectById(state, id))
 
@@ -89,8 +95,6 @@ const Index = () => {
     dispatch(getPageArticle({ page: 1, limit: 5 })).then(({ payload }) => setLists(payload?.data))
   }, [dispatch])
 
-  console.log(lists)
-
   const item = sessionStorage.getItem('checked')
   useEffect(() => {
     let items = JSON.parse(item)
@@ -103,10 +107,13 @@ const Index = () => {
     }
   }, [item])
 
-  const location = useLocation()
-  const { pathname } = location
+  const pathname = window.location.href
   const title = defaultData?.title
   const str = defaultData?.description
+
+  const parser = new DOMParser();
+  const html = parser.parseFromString(str, 'text/html');
+  const desc = html.body.firstChild.textContent
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,11 +132,16 @@ const Index = () => {
           toast.success(res.payload.data.message, optionToast);
           setLoad(false);
           dispatch(getArticle());
-          dispatch(getPageComment({ id, page, limit: 5 }));
-          if (dataToken == null || item == null) {
+          dispatch(getPageComment({ id, page, limit: 5 })).then(({ payload }) => setDatas([{ data: payload?.data, total: payload?.total }]))
+          console.log({ dataToken, item })
+          if (dataToken == null && item == null) {
             setFormValue({
               name: "",
               phone_number: "",
+              message: ""
+            })
+          } else {
+            setFormValue({
               message: ""
             });
           }
@@ -142,20 +154,26 @@ const Index = () => {
         toast.error(`Terjadi kesalahan`, optionToast);
       }
     } else {
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
     }
   }
 
   return (
     <>
       <Helmet>
-        <title>{`${title} | Berita`}</title>
-        <meta name="description" content={str?.split('.').slice(0, 3).join('.')} />
+        <title>{`${title} | Desa Wisata Melung`}</title>
+        <meta name="description" content={desc?.split('.').slice(0, 1).join('.')} />
 
         <meta property="og:title" content={title} />
-        <meta property="og:description" content={str?.split('.').slice(0, 3).join('.')} />
+        <meta property="og:description" content={desc?.split('.').slice(0, 1).join('.')} />
         <meta property="og:image" content={defaultData?.article_images?.[0]?.url} />
         <meta property="og:url" content={pathname} />
+
+        <meta property="twitter:card" content={defaultData?.article_images?.[0]?.url} />
+        <meta property="twitter:url" content={pathname} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={desc?.split('.').slice(0, 1).join('.')} />
+        <meta property="twitter:image" content={defaultData?.article_images?.[0]?.url} />
       </Helmet>
       <div className="bg-primary text-white w-full h-44 flex flex-col justify-center items-center">
         <h1 className="text-lg md:text-xl lg:text-2xl text-center font-bold px-2 sm:px-24 md:px-32 lg:px-44 xl:px-56 leading-relaxed">{title}</h1>
@@ -173,9 +191,9 @@ const Index = () => {
                     </div>
                   ))}
                 </Carousel>
-                <p className="text-base leading-loose tracking-wide">
-                  <div dangerouslySetInnerHTML={{ __html: str }} />
-                </p>
+                <div className="text-base leading-loose tracking-wide">
+                  <p dangerouslySetInnerHTML={{ __html: str }} />
+                </div>
                 <p className="text-xl font-bold">Bagikan Berita</p>
                 <div className="flex gap-2">
                   <div className="Demo__some-network">
