@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb, Button, DOMHelper, Input, InputGroup, Modal, Pagination, Panel, List, Stack, Table } from "rsuite";
-import SearchIcon from '@rsuite/icons/Search';
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import DOMHelper from "rsuite/DOMHelper";
+import Input from "rsuite/Input";
+import InputGroup from "rsuite/InputGroup";
+import Modal from "rsuite/Modal";
+import Pagination from "rsuite/Pagination";
+import Panel from "rsuite/Panel";
+import List from "rsuite/List";
+import Stack from "rsuite/Stack";
+import Table from "rsuite/Table";
+import { BiSearch } from "react-icons/bi";
 import { BiSolidDetail } from "react-icons/bi";
 import 'react-toastify/dist/ReactToastify.css';
 import { getContact, contactSelector } from "../../../store/contactSlice";
@@ -112,7 +122,7 @@ const Index = () => {
           <InputGroup inside>
             <Input placeholder="Search" value={searchKeyword} onChange={setSearchKeyword} />
             <InputGroup.Addon>
-              <SearchIcon />
+              <BiSearch />
             </InputGroup.Addon>
           </InputGroup>
         </Stack>

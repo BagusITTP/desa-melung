@@ -1,7 +1,8 @@
-import { Col, Container, FlexboxGrid, Panel } from "rsuite"
-import { MdAccountBalance } from "react-icons/md";
-import { MdReceipt } from "react-icons/md";
-import { MdPaid } from "react-icons/md";
+import Col from "rsuite/Col";
+import Container from "rsuite/Container";
+import FlexboxGrid from "rsuite/FlexboxGrid";
+import Panel from "rsuite/Panel";
+import { TfiPackage, TfiReceipt, TfiMoney } from "react-icons/tfi";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboard, tourBookingSelector } from "../../../store/tourBookingSlice";
@@ -27,17 +28,17 @@ const Index = () => {
   const [defaultData, setDefaultData] = useState([]);
   const [data, setData] = useState([
     {
-      icon: <MdAccountBalance />,
+      icon: <TfiPackage />,
       title: 'Pesanan Paket Wisata/hari',
       value: 0
     },
     {
-      icon: <MdReceipt />,
+      icon: <TfiReceipt />,
       title: 'Pesanan Tiket Masuk/hari',
       value: 0
     },
     {
-      icon: <MdPaid />,
+      icon: <TfiMoney />,
       title: 'Total Pemasukan/hari',
       value: "Rp. 100.000"
     }
