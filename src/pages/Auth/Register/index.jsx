@@ -35,16 +35,16 @@ const Index = () => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const cookies = new Cookies()
 
   useEffect(() => {
+    const cookies = new Cookies()
     const token = cookies.get('token');
     if (token) {
       const dataToken = jwtDecode(token)
       toast.info('Anda sudah login', optionToast);
       navigate(dataToken.role === 'admin' ? '/admin/dashboard' : '/');
     }
-  }, []);
+  }, [navigate]);
 
   const handleChange = () => setVisible(!visible)
 

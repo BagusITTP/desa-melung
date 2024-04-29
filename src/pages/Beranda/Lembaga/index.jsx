@@ -1,4 +1,5 @@
-import { FlexboxGrid, Col } from 'rsuite'
+import FlexboxGrid from 'rsuite/FlexboxGrid';
+import Col from 'rsuite/Col';
 
 const Index = () => {
   return (

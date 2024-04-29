@@ -52,15 +52,10 @@ const Index = () => {
 
       const res = await dispatch(updateUser({ name, phone_number, id }));
 
-      console.log(res)
-
       try {
         if (res.payload.data.status === "success") {
           toast.success(res.payload.data.message, optionToast);
           setLoad(false)
-          // setTimeout(() => {
-          //   window.location.reload()
-          // }, 500)
           setNotif(true)
           dispatch(getProfile())
         } else {
