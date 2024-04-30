@@ -1,20 +1,30 @@
-import { FlexboxGrid, Col, Placeholder, ButtonToolbar, Button } from 'rsuite'
+import FlexboxGrid from 'rsuite/FlexboxGrid';
+import Col from 'rsuite/Col';
+import Placeholder from 'rsuite/Placeholder';
+import Button from 'rsuite/Button';
+import ButtonGroup from 'rsuite/ButtonGroup';
 import { BiXCircle, BiCheckCircle } from "react-icons/bi";
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { getUserTicketBooking, ticketBookingSelector } from '../../../../store/ticketBookingSlice';
+import { getPaymentTicket, getUserTicketBooking, rePaymentTicket, ticketBookingSelector } from '../../../../store/ticketBookingSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
 import formatDate from '../../../../utils/formatDate';
 import rupiah from '../../../../utils/rupiah';
 import { Transition } from '@headlessui/react';
+import { toast } from 'react-toastify';
 import TiketMasukPrint from '../../../Print/TiketMasukPrint';
 import { useReactToPrint } from 'react-to-print';
+import optionToast from '../../../../constants/optionToast';
 
 const Index = () => {
   const componentRef = useRef();
   const [defaultData, setDefaultData] = useState([])
   const [detailOpen, setDetailOpen] = useState(false)
+  const [load, setLoad] = useState(false)
+  const [token, setToken] = useState("")
   const [detail, setDetail] = useState([])
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { status } = useSelector(state => state.ticketBookingSlice)
   const ticketPackage = useSelector(ticketBookingSelector.selectAll)
 
@@ -25,6 +35,60 @@ const Index = () => {
   useEffect(() => {
     setDefaultData(ticketPackage != [] ? ticketPackage : [])
   }, [ticketPackage])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoad(true)
+    try {
+      const res = await dispatch(rePaymentTicket({ order_id: detail?.midtrans_booking_code }));
+      if (res.payload.data.status === "success") {
+        setToken(res.payload.data.token)
+        toast.success(res.payload.data.message, optionToast);
+      } else {
+        toast.error(res.payload.data.message, optionToast);
+      }
+    } catch (err) {
+      toast.error(`Terjadi kesalahan`, optionToast);
+    }
+    setLoad(false)
+  }
+
+  useEffect(() => {
+    const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+
+    let scriptTag = document.createElement('script');
+    scriptTag.src = midtransScriptUrl;
+
+    const myMidtransClientKey = import.meta.env.VITE_CLIENTKEY;
+    scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+
+    document.body.appendChild(scriptTag);
+
+    return () => {
+      document.body.removeChild(scriptTag);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          dispatch(getPaymentTicket(result)).then(({ payload }) => toast.success(payload.data.message, optionToast))
+          navigate(`/invoice?order_id=${result.order_id}&&type=tiket`)
+        },
+        onPending: function (result) {
+          dispatch(getPaymentTicket(result)).then(({ payload }) => toast.info(payload.data.message, optionToast))
+        },
+        onError: function (result) {
+          dispatch(getPaymentTicket(result)).then(({ payload }) => toast.error(payload.data.message, optionToast))
+        },
+        onClose: function () {
+          toast.error('Transaksi dibatalkan', optionToast)
+        }
+      })
+    }
+  }, [token])
 
   const handleDetail = (data) => {
     setDetailOpen(false)
@@ -47,20 +111,32 @@ const Index = () => {
           <FlexboxGrid justify='space-around' className="gap-y-10">
             <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={24} lg={12} xl={12} className="!flex !flex-col !px-5 !gap-y-3 !h-[490px] !overflow-auto sm:!h-[490px] sm:!overflow-auto lg:!h-full lg:!overflow-hidden">
               {
-                defaultData.length != 0
+                defaultData?.length != 0
                   ?
                   status == "success"
                     ?
                     defaultData.map((item, index) => (
-                      <div className={`p-3 rounded-lg bg-white border border-white hover:border hover:border-primary hover:cursor-pointer transition ${detailOpen && detail?.id == item?.id ? 'border-primary border-2 hover:border-2' : ''}`} key={index} onClick={() => handleDetail(item)}>
+                      <div className={`p-3 rounded-lg bg-white border border-white hover:border hover:border-primary hover:cursor-pointer transition ${detailOpen && detail?.midtrans_booking_code == item?.midtrans_booking_code ? '!border-primary border-2 hover:border-2' : ''}`} key={index} onClick={() => handleDetail(item)}>
                         <div className="flex justify-between items-center">
                           <h6 className="text-xl font-bold">Pagubugan Melung</h6>
                           {
                             item?.payment_status == "success"
                               ?
-                              <BiCheckCircle className="text-primary-Green text-2xl" />
+                              <div className="flex items-center gap-1">
+                                <p>Dibayar</p>
+                                <BiCheckCircle className="text-primary-Green text-2xl" />
+                              </div>
                               :
-                              <BiXCircle className="text-primary-Red text-2xl" />
+                              item?.payment_status == "waiting" || item?.payment_status == null
+                                ?
+                                <div className="flex items-center gap-1">
+                                  <p>Menunggu Pemabayaran</p>
+                                </div>
+                                :
+                                <div className="flex items-center gap-1">
+                                  <p>Dibatalkan</p>
+                                  <BiXCircle className="text-primary-Red text-2xl" />
+                                </div>
                           }
                         </div>
                         <div className="pl-2 flex flex-col gap-2 mt-2">
@@ -132,12 +208,24 @@ const Index = () => {
                     <p className="text-xl font-bold">Total</p>
                     <p className="text-2xl font-bold">{rupiah(detail?.total_price)}</p>
                   </div>
-                  <ButtonToolbar className="justify-center w-full">
-                    <Button appearance="primary" type="button" onClick={handlePrint} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-primary-Medium-Dark disabled:opacity-50">
-                      <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect width="12" height="8" x="6" y="14" /></svg>
-                      Print
-                    </Button>
-                  </ButtonToolbar>
+                  {
+                    detail?.payment_status == "success"
+                      ?
+                      <ButtonGroup className="!flex justify-center w-full">
+                        <Button appearance="primary" type="button" onClick={handlePrint} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-primary-Medium-Dark disabled:opacity-50">
+                          <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect width="12" height="8" x="6" y="14" /></svg>
+                          Print
+                        </Button>
+                      </ButtonGroup>
+                      :
+                      detail?.payment_status == "waiting" || detail?.payment_status == null
+                        ?
+                        <ButtonGroup className="!flex justify-center w-full">
+                          <Button appearance="primary" type="button" onClick={handleSubmit} loading={load} className="py-2 px-3 inline-flex items-center gap-x-2 text-lg font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-primary-Medium-Dark disabled:opacity-50">Lanjut Bayar</Button>
+                        </ButtonGroup>
+                        :
+                        ""
+                  }
                 </div>
               </Transition>
               <h5 className={`w-full !h-96 flex justify-center items-center ${detailOpen ? "hidden" : "block"}`}>Tidak ada</h5>
