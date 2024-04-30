@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import Logo from "../../assets/Logo_small.svg";
-import { Button, ButtonToolbar } from "rsuite"
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
 import { getOrderIdTicket, ticketBookingSelector } from "../../store/ticketBookingSlice";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +32,20 @@ const TiketMasuk = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
+
+  let payment_status = defaultData?.payment_status
+
+  switch (payment_status) {
+    case "success":
+      payment_status = "Dibayar"
+      break
+    case "waiting":
+      payment_status = "Menunggu Pembayaran"
+      break
+    default:
+      payment_status = "Dibatalkan"
+      break
+  }
   return (
     <>
       <div className="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl">
@@ -58,7 +73,7 @@ const TiketMasuk = () => {
             <h3 className="text-lg font-semibold text-gray-800">{defaultData?.user?.name}</h3>
             <dl className="grid sm:grid-cols-5 gap-x-1 mt-3">
               <dt className="col-span-2 font-semibold text-gray-800">Status Pembayaran:</dt>
-              <dd className="col-span-3 text-gray-500 mb-0">{defaultData?.payment_status === "success" ? "Sudah Dibayar" : "Belum Dibayar"}</dd>
+              <dd className="col-span-3 text-gray-500 mb-0">{payment_status}</dd>
             </dl>
           </div>
 

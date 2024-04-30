@@ -6,6 +6,19 @@ import rupiah from "../../utils/rupiah";
 export default class TiketMasukPrint extends Component {
   render() {
     const { data } = this.props;
+    let payment_status = data?.payment_status
+
+    switch (payment_status) {
+      case "success":
+        payment_status = "Dibayar"
+        break
+      case "waiting":
+        payment_status = "Menunggu Pembayaran"
+        break
+      default:
+        payment_status = "Dibatalkan"
+        break
+    }
     return (
       <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto py-4 sm:py-10">
         <div className="sm:w-11/12 lg:w-3/4 mx-auto">
@@ -34,7 +47,7 @@ export default class TiketMasukPrint extends Component {
                 <h3 className="text-lg font-semibold text-gray-800">{data?.user?.name}</h3>
                 <dl className="grid sm:grid-cols-5 gap-x-1 mt-3">
                   <dt className="col-span-2 font-semibold text-gray-800">Status Pembayaran:</dt>
-                  <dd className="col-span-3 text-gray-500 mb-0">{data?.payment_status === "success" ? "Sudah Dibayar" : "Belum Dibayar"}</dd>
+                  <dd className="col-span-3 text-gray-500 mb-0">{payment_status}</dd>
                 </dl>
               </div>
 
