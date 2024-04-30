@@ -1,4 +1,11 @@
-import { FlexboxGrid, Col, Form, ButtonToolbar, Button, Schema, DateRangePicker, Modal } from "rsuite"
+import FlexboxGrid from "rsuite/FlexboxGrid";
+import Col from "rsuite/Col";
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import DateRangePicker from "rsuite/DateRangePicker";
+import Form from "rsuite/Form";
+import Schema from "rsuite/Schema";
+import Modal from "rsuite/Modal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify"
@@ -11,6 +18,8 @@ import rupiah from "../../../utils/rupiah";
 import { getPaymentTour, setTourBooking } from "../../../store/tourBookingSlice";
 import formatDate from "../../../utils/formatDate";
 import ModalConfirm from "../../../components/Modal";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 const { beforeToday } = DateRangePicker;
 
 const amount_rule = Schema.Types.NumberType().min(20, "Minimal 20 orang per paket").isRequired("Jumlah Tiket wajib diisi");
@@ -73,12 +82,15 @@ const Index = () => {
         },
         onPending: function (result) {
           dispatch(getPaymentTour(result)).then(({ payload }) => toast.info(payload.data.message, optionToast))
+          window.location.replace(`/paket-wisata/riwayat`)
         },
         onError: function (result) {
           dispatch(getPaymentTour(result)).then(({ payload }) => toast.error(payload.data.message, optionToast))
+          window.location.replace(`/paket-wisata/riwayat`)
         },
         onClose: function () {
           toast.error('Transaksi dibatalkan', optionToast)
+          window.location.replace(`/paket-wisata/riwayat`)
         }
       })
     }
@@ -114,7 +126,7 @@ const Index = () => {
       }
     } else {
       setOpenDetailConfirm(false)
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
     }
   }
 
@@ -127,8 +139,9 @@ const Index = () => {
   }
 
   function hitungBiayaMakan(tglDatang, tglPulang, jumlahOrang) {
-
     const tarifMakan = defaultData?.price;
+    const tarifPenginapan = 60000; // Tarif penginapan per malam
+    const tarifHiburanPerOrang = 25000; // Tarif hiburan per orang
 
     const tanggalDatang = new Date(tglDatang);
     const tanggalPulang = new Date(tglPulang);
@@ -150,6 +163,15 @@ const Index = () => {
     } else if (tanggalPulang.getHours() >= 1 && tanggalPulang.getHours() <= 12) {
       jumlahMakan = jumlahMakan - 2;
     }
+
+    const biayaMakan = tarifMakan * jumlahMakan;
+    const biayaPenginapan = tarifPenginapan * Math.floor(diffTime / (oneDay));
+    const biayaHiburan = tarifHiburanPerOrang;
+    const totalBiayaSebelumPajak = biayaMakan + biayaPenginapan + biayaHiburan;
+    const pajak = totalBiayaSebelumPajak * 0.1; // Pajak 10%
+    const totalBiaya = totalBiayaSebelumPajak + pajak;
+
+    console.log({ diff: Math.floor(diffTime / (oneDay)), biayaMakan, biayaPenginapan, biayaHiburan, totalBiayaSebelumPajak, pajak, totalBiaya })
 
     defaultData?.id == 3
       ? setFormValue({ ...formValue, meal_count: jumlahMakan, total_price: tarifMakan * jumlahOrang * jumlahMakan })
@@ -237,7 +259,7 @@ const Index = () => {
                   <div key={index} className={`${imageChunks.length > 1 ? `grid` : 'flex justify-center flex-wrap w-full'} ${chunk.length >= 1 && chunk.length < 3 ? 'auto-rows-max' : ''} gap-2`}>
                     {
                       chunk.map((image, index) => (
-                        <img key={index} loading='lazy' className={`${imageChunks.length > 1 ? `w-full h-full` : 'w-full sm:w-full lg:w-[45%]'} rounded-lg`} src={image?.url} alt="images" />
+                        <LazyLoadImage effect="blur" key={index} className={`${imageChunks.length > 1 ? `w-full h-max` : 'w-full sm:w-full lg:w-[45%]'} rounded-lg`} src={image?.url} alt="images" />
                       ))
                     }
                   </div>
@@ -287,7 +309,6 @@ const Index = () => {
                                 })
                               }}
                             />
-                            <Form.HelpText>Tanggal Reservasi harus diisi</Form.HelpText>
                           </Form.Group>
                         </FlexboxGrid.Item>
                       )
@@ -301,7 +322,7 @@ const Index = () => {
                       <Form.Control
                         name="amount"
                         errorPlacement='bottomEnd'
-                        placeholder="cth. 5"
+                        placeholder="cth. 20"
                         disabled={load}
                         type="number"
                         onWheel={numberInputOnWheelPreventChange}
@@ -313,7 +334,7 @@ const Index = () => {
                           })
                         }}
                       />
-                      <Form.HelpText>Jumlah Orang harus diisi</Form.HelpText>
+                      <Form.HelpText>Jumlah Orang harus lebih dari 20 orang</Form.HelpText>
                     </Form.Group>
 
                   </FlexboxGrid.Item>

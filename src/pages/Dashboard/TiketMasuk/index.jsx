@@ -1,13 +1,23 @@
 import { ToastContainer, toast } from "react-toastify"
-import { Breadcrumb, Button, ButtonToolbar, Form, Input, Panel, Schema, Uploader, Modal } from "rsuite"
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Form from "rsuite/Form";
+import Input from "rsuite/Input";
+import Panel from "rsuite/Panel";
+import Schema from "rsuite/Schema";
+import Uploader from "rsuite/Uploader";
+import Modal from "rsuite/Modal";
 import optionToast from "../../../constants/optionToast";
-import CloseIcon from '@rsuite/icons/Close';
-import RemindIcon from '@rsuite/icons/legacy/Remind';
+import { TfiAlert } from "react-icons/tfi";
+import { BiXCircle } from "react-icons/bi";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { attractionSelector, getAttraction, updateAttraction } from "../../../store/attractionSlice";
 import { getVehicle } from "../../../store/vehicleSlice";
 import { deleteAttractionImage } from "../../../store/attractionImage";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
@@ -25,7 +35,13 @@ Textarea.displayName = 'Textarea';
 
 const Index = () => {
   const formRef = useRef();
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState({
+    motor_price: 0,
+    mobil_price: 0,
+    ticket_price: 0,
+    description: "",
+    images: [],
+  });
   const [datas, setDatas] = useState([])
   const [facilities, setFacilities] = useState([])
   const [locations, setLocations] = useState([])
@@ -66,7 +82,7 @@ const Index = () => {
     e.preventDefault();
 
     if (!formRef.current.check()) {
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
       return;
     }
 
@@ -316,13 +332,12 @@ const Index = () => {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", padding: "20px" }}>
           {formValue?.attraction_images?.map(({ url, id, name }, index) => (
             <div key={index} style={{ position: "relative" }}>
-              <img src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+              <LazyLoadImage effect="blur" src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
               <button
                 style={{
                   position: "absolute",
                   top: "-10px",
                   right: "-10px",
-                  padding: "2px 5px",
                   borderRadius: "50%",
                   border: "none",
                   cursor: "pointer",
@@ -330,7 +345,7 @@ const Index = () => {
                 className="bg-primary text-white"
                 onClick={() => handleOpenDeleteImage(id, name)}
               >
-                <CloseIcon />
+                <BiXCircle size={28} />
               </button>
             </div>
           ))}
@@ -338,7 +353,7 @@ const Index = () => {
 
         <Modal backdrop="static" role="alertdialog" open={openDeleteImage} onClose={handleCloseDeleteImage} size="xs">
           <Modal.Body>
-            <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
+            <TfiAlert style={{ color: '#ffb300', fontSize: 24 }} />
             Apakah kamu yakin untuk menghapus data dengan gambar <span className="font-bold">{headerDeleteImage}</span> ini?
           </Modal.Body>
           <Modal.Footer>
