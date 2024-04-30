@@ -1,5 +1,12 @@
 import { ToastContainer, toast } from "react-toastify"
-import { Breadcrumb, Button, ButtonToolbar, Form, Input, Panel, Schema, Uploader } from "rsuite"
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Form from "rsuite/Form";
+import Input from "rsuite/Input";
+import Panel from "rsuite/Panel";
+import Schema from "rsuite/Schema";
+import Uploader from "rsuite/Uploader";
 import optionToast from "../../../constants/optionToast";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -66,7 +73,7 @@ const UbahPaketWisata = () => {
     e.preventDefault();
 
     if (!formRef.current.check()) {
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
       return;
     }
 

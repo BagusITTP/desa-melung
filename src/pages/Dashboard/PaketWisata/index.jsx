@@ -3,12 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import optionToast from "../../../constants/optionToast";
-import { Breadcrumb, Button, DOMHelper, Input, InputGroup, Modal, Pagination, Panel, List, Stack, Table } from "rsuite";
-import SearchIcon from '@rsuite/icons/Search';
-import EditIcon from '@rsuite/icons/Edit';
-import TrashIcon from '@rsuite/icons/Trash';
-import RemindIcon from '@rsuite/icons/legacy/Remind';
-import CloseIcon from '@rsuite/icons/Close';
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import DOMHelper from "rsuite/DOMHelper";
+import Input from "rsuite/Input";
+import InputGroup from "rsuite/InputGroup";
+import Modal from "rsuite/Modal";
+import Pagination from "rsuite/Pagination";
+import Panel from "rsuite/Panel";
+import List from "rsuite/List";
+import Stack from "rsuite/Stack";
+import Table from "rsuite/Table";
+import { BiSearch, BiEditAlt, BiTrash, BiXCircle } from "react-icons/bi";
+import { TfiAlert } from "react-icons/tfi";
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteTourPackage, getTourPackage, tourPackageSelector } from "../../../store/tourPackageSlice";
 import { deleteTourImage } from "../../../store/tourImageSlice";
@@ -170,7 +177,7 @@ const Index = () => {
           <InputGroup inside>
             <Input placeholder="Search" value={searchKeyword} onChange={setSearchKeyword} />
             <InputGroup.Addon>
-              <SearchIcon />
+              <BiSearch />
             </InputGroup.Addon>
           </InputGroup>
         </Stack>
@@ -236,10 +243,10 @@ const Index = () => {
               {rowData => (
                 <div className='flex place-content-center gap-1'>
                   <Button className='hover:!bg-green-500 group' onClick={() => navigate(`/admin/paket-wisata/ubah/${rowData.id}`)}>
-                    <EditIcon className='group-hover:text-white' />
+                    <BiEditAlt className='group-hover:text-white' />
                   </Button>
                   <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.title)}>
-                    <TrashIcon className='group-hover:text-white' />
+                    <BiTrash className='group-hover:text-white' />
                   </Button>
                 </div>
               )}
@@ -275,13 +282,12 @@ const Index = () => {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", padding: "20px" }}>
               {dataImage?.map(({ url, id, name }, index) => (
                 <div key={index} style={{ position: "relative" }}>
-                  <img src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                  <img src={url} style={{ objectFit: "cover", width: "100%", height: "100%" }} loading="lazy" />
                   <button
                     style={{
                       position: "absolute",
                       top: "-10px",
                       right: "-10px",
-                      padding: "2px 5px",
                       borderRadius: "50%",
                       border: "none",
                       cursor: "pointer",
@@ -289,7 +295,7 @@ const Index = () => {
                     className="bg-primary text-white"
                     onClick={() => handleOpenDeleteImage(id, name)}
                   >
-                    <CloseIcon />
+                    <BiXCircle size={28} />
                   </button>
                 </div>
               ))}
@@ -299,7 +305,7 @@ const Index = () => {
 
         <Modal backdrop="static" role="alertdialog" open={openDeleteImage} onClose={handleCloseDeleteImage} size="xs">
           <Modal.Body>
-            <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
+            <TfiAlert style={{ color: '#ffb300', fontSize: 24 }} />
             Apakah kamu yakin untuk menghapus data dengan foto <span className="font-bold">{headerDeleteImage}</span> ini?
           </Modal.Body>
           <Modal.Footer>
@@ -312,7 +318,7 @@ const Index = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal backdrop="static" role="alertdialog" open={openFacilities} onClose={handleCloseFacilities} size="sm">
+        <Modal role="alertdialog" open={openFacilities} onClose={handleCloseFacilities} size="sm">
           <Modal.Header>
             <Modal.Title>Facilitas {headerFacilities}</Modal.Title>
           </Modal.Header>
@@ -327,9 +333,9 @@ const Index = () => {
           </Modal.Body>
         </Modal>
 
-        <Modal backdrop="static" role="alertdialog" open={openDelete} onClose={handleCloseDelete} size="xs">
+        <Modal role="alertdialog" open={openDelete} onClose={handleCloseDelete} size="xs">
           <Modal.Body>
-            <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
+            <TfiAlert style={{ color: '#ffb300', fontSize: 24 }} />
             Apakah kamu yakin untuk menghapus data dengan judul <span className="font-bold">{headerDelete}</span> ini?
           </Modal.Body>
           <Modal.Footer>

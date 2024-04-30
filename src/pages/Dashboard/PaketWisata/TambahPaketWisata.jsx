@@ -2,7 +2,14 @@ import { forwardRef, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify"
-import { Breadcrumb, Button, ButtonToolbar, Form, Input, Panel, Schema, Uploader } from "rsuite"
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import ButtonToolbar from "rsuite/ButtonToolbar";
+import Form from "rsuite/Form";
+import Input from "rsuite/Input";
+import Panel from "rsuite/Panel";
+import Schema from "rsuite/Schema";
+import Uploader from "rsuite/Uploader";
 import optionToast from "../../../constants/optionToast";
 import { setTourPackage } from "../../../store/tourPackageSlice";
 
@@ -75,7 +82,7 @@ const TambahPaketWisata = () => {
         toast.error(`Terjadi kesalahan`, optionToast);
       }
     } else {
-      toast.error(`Perisa kembali inputan anda`, optionToast);
+      toast.error(`Pastikan semua data yang Anda masukkan sudah benar`, optionToast);
     }
   }
 
