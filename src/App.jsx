@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import { Placeholder } from 'rsuite'
+import Placeholder from 'rsuite/Placeholder';
 import { Suspense, lazy } from 'react'
 import './App.css'
 import Error from './pages/ErrorPage'

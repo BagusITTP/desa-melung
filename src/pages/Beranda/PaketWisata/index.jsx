@@ -1,9 +1,17 @@
-import { FlexboxGrid, Col, Placeholder } from 'rsuite'
+import FlexboxGrid from 'rsuite/FlexboxGrid';
+import Col from 'rsuite/Col';
+import Placeholder from 'rsuite/Placeholder';
 import rupiah from '../../../utils/rupiah'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTourPackage, tourPackageSelector } from '../../../store/tourPackageSlice'
+import PaketCamping from "../../../assets/images/paket-camping.webp"
+import PaketEdukasi from "../../../assets/images/paket-edukasi.webp"
+import PaketLiveIn from "../../../assets/images/paket-livein.webp"
+import PaketPelatihan from "../../../assets/images/paket-pelatihan.webp"
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Index = () => {
   const [defaultData, setDefaultData] = useState([])
@@ -19,7 +27,12 @@ const Index = () => {
     setDefaultData(tourPackage != "Tidak ada data" ? tourPackage : [])
   }, [tourPackage])
 
-  console.log(defaultData)
+  const ImageList = {
+    'Paket Camping': PaketCamping,
+    'Paket Edukasi': PaketEdukasi,
+    'Paket Live In': PaketLiveIn,
+    'Paket Pelatihan': PaketPelatihan
+  };
   return (
     <>
       <div className="bg-primary text-white w-full h-44 flex justify-center items-center">
@@ -33,11 +46,11 @@ const Index = () => {
               defaultData.map((data, index) => (
                 <FlexboxGrid justify='space-around' className="gap-y-2" key={index}>
                   <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={9} lg={9} xl={9} className="!flex !justify-center">
-                    <img className="h-full sm:h-full xl:h-96 max-w-full rounded-t-xl sm:rounded-t-xl md:rounded-s-xl md:rounded-tr-none lg:rounded-s-xl lg:rounded-tr-none xl:rounded-s-xl xl:rounded-tr-none object-cover" src={data?.tour_images?.[0]?.url || "https://placehold.co/600x400"} alt="sawah" />
+                    <LazyLoadImage effect="blur" className="h-full sm:h-full xl:h-96 max-w-full rounded-t-xl sm:rounded-t-xl md:rounded-s-xl md:rounded-tr-none lg:rounded-s-xl lg:rounded-tr-none xl:rounded-s-xl xl:rounded-tr-none object-cover" src={ImageList[data?.title] || "https://placehold.co/600x400"} alt="sawah" />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item as={Col} colspan={24} xs={24} sm={24} md={15} lg={15} xl={15} className="items-center h-full p-0 sm:p-0 md:!px-5 lg:!px-5 xl:p-0">
                     <div className="flex flex-col gap-3 w-full h-full justify-center">
-                      <p className="text-2xl font-bold">{data?.title}</p>
+                      <h1 className="text-2xl font-bold">{data?.title}</h1>
                       <h6 className="text-md text-secondary">{data?.sub_title}</h6>
                       <p className="text-base line-clamp-3">{data?.description}</p>
                       <p className="text-2xl text-primary font-bold">{rupiah(data?.price)}</p>

@@ -140,8 +140,6 @@ const Index = () => {
 
   function hitungBiayaMakan(tglDatang, tglPulang, jumlahOrang) {
     const tarifMakan = defaultData?.price;
-    const tarifPenginapan = 60000; // Tarif penginapan per malam
-    const tarifHiburanPerOrang = 25000; // Tarif hiburan per orang
 
     const tanggalDatang = new Date(tglDatang);
     const tanggalPulang = new Date(tglPulang);
@@ -163,15 +161,6 @@ const Index = () => {
     } else if (tanggalPulang.getHours() >= 1 && tanggalPulang.getHours() <= 12) {
       jumlahMakan = jumlahMakan - 2;
     }
-
-    const biayaMakan = tarifMakan * jumlahMakan;
-    const biayaPenginapan = tarifPenginapan * Math.floor(diffTime / (oneDay));
-    const biayaHiburan = tarifHiburanPerOrang;
-    const totalBiayaSebelumPajak = biayaMakan + biayaPenginapan + biayaHiburan;
-    const pajak = totalBiayaSebelumPajak * 0.1; // Pajak 10%
-    const totalBiaya = totalBiayaSebelumPajak + pajak;
-
-    console.log({ diff: Math.floor(diffTime / (oneDay)), biayaMakan, biayaPenginapan, biayaHiburan, totalBiayaSebelumPajak, pajak, totalBiaya })
 
     defaultData?.id == 3
       ? setFormValue({ ...formValue, meal_count: jumlahMakan, total_price: tarifMakan * jumlahOrang * jumlahMakan })
@@ -380,7 +369,7 @@ const Index = () => {
                       <p className="text-base text-right">{formatDate(formValue?.arrival_date)}</p>
                     </div>
                     <div className="flex justify-between items-center w-full">
-                      <p className="text-base">Tanggal Datang</p>
+                      <p className="text-base">Tanggal Pulang</p>
                       <p className="text-base text-right">{formatDate(formValue?.departure_date)}</p>
                     </div>
                   </div>

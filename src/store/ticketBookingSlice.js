@@ -64,6 +64,21 @@ export const getPaymentTicket = createAsyncThunk("ticketBooking/getPaymentTicket
   return response
 })
 
+export const rePaymentTicket = createAsyncThunk("ticketBooking/rePaymentTicket", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+  const response = await axios.post(`${ticketBookingAPI}/repay`, data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: data
+    })
+
+  return response
+})
+
 export const setTicketBooking = createAsyncThunk("ticketBooking/setTicketBooking", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
@@ -134,6 +149,9 @@ const ticketBookingSlice = createSlice({
       })
       .addCase(getOrderIdTicket.rejected, (state) => {
         state.status = "failed"
+      })
+      .addCase(rePaymentTicket.fulfilled, (state, action) => {
+        ticketBookingEntity.addOne(state, action.payload)
       })
       .addCase(getPaymentTicket.fulfilled, (state, action) => {
         ticketBookingEntity.addOne(state, action.payload)

@@ -79,6 +79,21 @@ export const getPaymentTour = createAsyncThunk("tourBooking/getPaymentTour", asy
   return response
 })
 
+export const rePaymentTour = createAsyncThunk("tourBooking/rePaymentTour", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+  const response = await axios.post(`${tourBookingAPI}/repay`, data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: data
+    })
+
+  return response
+})
+
 export const setTourBooking = createAsyncThunk("tourBooking/setTourBooking", async (data) => {
   const cookies = new Cookies()
   let token = cookies.get("token")
@@ -161,6 +176,9 @@ const tourBookingSlice = createSlice({
         state.status = "failed"
       })
       .addCase(getPaymentTour.fulfilled, (state, action) => {
+        tourBookingEntity.addOne(state, action.payload)
+      })
+      .addCase(rePaymentTour.fulfilled, (state, action) => {
         tourBookingEntity.addOne(state, action.payload)
       })
       .addCase(setTourBooking.fulfilled, (state, action) => {

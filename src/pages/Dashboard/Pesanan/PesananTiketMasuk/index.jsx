@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb, Button, DOMHelper, Input, InputGroup, Modal, Pagination, Panel, Stack, Table, IconButton } from "rsuite";
+import Breadcrumb from "rsuite/Breadcrumb"
+import Button from "rsuite/Button";
+import DOMHelper from "rsuite/DOMHelper";
+import Input from "rsuite/Input";
+import InputGroup from "rsuite/InputGroup";
+import Modal from "rsuite/Modal";
+import Pagination from "rsuite/Pagination";
+import Panel from "rsuite/Panel";
+import Stack from "rsuite/Stack";
+import Table from "rsuite/Table";
+import IconButton from "rsuite/IconButton";
 import { toast } from "react-toastify";
-import SearchIcon from '@rsuite/icons/Search';
-import TrashIcon from '@rsuite/icons/Trash';
-import RemindIcon from '@rsuite/icons/legacy/Remind';
-import CollaspedOutlineIcon from '@rsuite/icons/CollaspedOutline';
-import ExpandOutlineIcon from '@rsuite/icons/ExpandOutline';
+import { BiSearch, BiTrash, BiSolidPlusSquare, BiSolidMinusSquare } from "react-icons/bi";
+import { TfiAlert } from "react-icons/tfi";
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteTicketBooking, getTicketBooking, ticketBookingSelector } from "../../../../store/ticketBookingSlice";
 import optionToast from "../../../../constants/optionToast";
@@ -27,9 +34,9 @@ const ExpandCell = ({ rowData, expandedRowKeys, onChange, ...props }) => (
       }}
       icon={
         expandedRowKeys.some(key => key === rowData[rowKey]) ? (
-          <CollaspedOutlineIcon />
+          <BiSolidMinusSquare style={{ fontSize: "1.2em" }} />
         ) : (
-          <ExpandOutlineIcon />
+          <BiSolidPlusSquare style={{ fontSize: "1.2em" }} />
         )
       }
     />
@@ -37,11 +44,24 @@ const ExpandCell = ({ rowData, expandedRowKeys, onChange, ...props }) => (
 );
 
 const renderRowExpanded = rowData => {
+  let payment_status = rowData?.payment_status
+
+  switch (payment_status) {
+    case "success":
+      payment_status = "Dibayar"
+      break
+    case "waiting":
+      payment_status = "Menunggu Pembayaran"
+      break
+    default:
+      payment_status = "Dibatalkan"
+      break
+  }
   return (
     <div className="flex gap-6 ms-5">
       <div>
         <p>Email: {rowData?.user?.email}</p>
-        <p>Status Pembayaran: {rowData?.payment_status}</p>
+        <p>Status Pembayaran: {payment_status}</p>
       </div>
       <div>
         <p>Jumlah Orang: {rowData?.amount} orang</p>
@@ -174,7 +194,7 @@ const Index = () => {
           <InputGroup inside>
             <Input placeholder="Search" value={searchKeyword} onChange={setSearchKeyword} />
             <InputGroup.Addon>
-              <SearchIcon />
+              <BiSearch />
             </InputGroup.Addon>
           </InputGroup>
         </Stack>
@@ -195,17 +215,22 @@ const Index = () => {
             <Cell>{(rowData, index) => index + 1}</Cell>
           </Column>
 
-          <Column flexGrow={1} >
+          <Column width={180} fullText>
+            <HeaderCell>Order ID</HeaderCell>
+            <Cell>{rowData => `${rowData?.midtrans_booking_code}`}</Cell>
+          </Column>
+
+          <Column flexGrow={1} fullText>
             <HeaderCell>Tanggal Pemesanan</HeaderCell>
             <Cell>{rowData => `${formatDate(rowData?.createdAt)}`}</Cell>
           </Column>
 
-          <Column width={280} >
+          <Column width={280} fullText>
             <HeaderCell>Nama Pemesan</HeaderCell>
             <Cell>{rowData => `${rowData?.user?.name}`}</Cell>
           </Column>
 
-          <Column width={130}>
+          <Column width={120}>
             <HeaderCell>Total</HeaderCell>
             <Cell>{rowData => `${rupiah(rowData?.total_price)}`}</Cell>
           </Column>
@@ -220,8 +245,8 @@ const Index = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <div className='flex place-content-center gap-1'>
-                  <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.user.name)}>
-                    <TrashIcon className='group-hover:text-white' />
+                  <Button className='hover:!bg-red-500 group' onClick={() => handleOpenDelete(rowData.id, rowData.midtrans_booking_code)}>
+                    <BiTrash className='group-hover:text-white' />
                   </Button>
                 </div>
               )}
@@ -251,8 +276,8 @@ const Index = () => {
 
         <Modal backdrop="static" role="alertdialog" open={openDelete} onClose={handleCloseDelete} size="xs">
           <Modal.Body>
-            <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus pesanan atas nama <span className="font-bold">{headerDelete}</span> ini?
+            <TfiAlert style={{ color: '#ffb300', fontSize: 24 }} />
+            Apakah kamu yakin untuk menghapus pesanan dengan order id <span className="font-bold">{headerDelete}</span> ini?
           </Modal.Body>
           <Modal.Footer>
             <Button className='bg-red-500' color="red" onClick={handleDelete} loading={load} appearance="primary">
